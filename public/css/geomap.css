@@ -1,0 +1,467 @@
+.contenido-pagina{
+  position: absolute;
+  top: -90px;
+  width: 100%;
+  z-index: -1;
+}
+
+.inp_plancha{
+  display: inline-block;
+  width: auto;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.span_plancha{
+  padding: 2px 2px;
+}
+
+.group_plancha{
+  display: flex;
+  align-items: center;
+}
+
+.a_plancha{
+  margin-left: 10px;
+  margin-top: 8px;
+}
+
+main.detalle {
+	margin: 0;
+  z-index: 0;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+}
+
+.main .elements .map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 1;
+}
+
+.main .elements #basemaps-wrapper {
+  position: absolute;
+  top: 130px;
+  left: 10px;
+  background: #f9ae00;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+  border-radius: 5px;
+  border-left: 1px solid #333;
+  z-index: 1;
+  transition: all .4s ease;
+}
+
+.main .elements #basemaps-wrapper .lista {
+  background: #f9ae00;
+  color: #333;
+  border-color: #f9ae00;
+}
+
+.main .elements .leaflet-top .leaflet-control {
+  margin-top: 170px;
+  transition: all .4s ease;
+}
+
+.main .elements aside .btn-mapa {
+  position: fixed;
+  top: 460px;
+  height: 140px;
+  width: 34px;
+  background: #f9ae00ab;
+  cursor: pointer;
+  z-index: 99;
+  transition: all .4s ease;
+}
+
+.main .elements aside .btn-mapa:hover {
+  background: #f9ae00;
+}
+
+.main .elements aside .btn-mapa.active.btn-afloramiento {
+  background-image: url("../images/geomap/icons/backServices_open.png");
+  left: 400px;
+}
+
+.main .elements aside .btn-mapa.active.btn-capas {
+  background-image: url("../images/geomap/icons/backServices_close.png");
+  right: 400px;
+}
+
+.main .elements aside .btn-mapa.btn-afloramiento {
+  left: 0px;
+  background-image: url("../images/geomap/icons/backServices_close.png");
+}
+
+.main .elements aside .btn-mapa.btn-afloramiento .btn-text {
+  transform: rotate(-90deg);
+  margin-top: 101px;
+  font-weight: 300;
+  color: #333;
+}
+
+.main .elements aside .btn-mapa.btn-capas {
+  right: 0px;
+  background-image: url("../images/geomap/icons/backServices_open.png");
+}
+
+.main .elements aside .btn-mapa.btn-capas .btn-text {
+  transform: rotate(90deg);
+  margin-top: 55px;
+  font-weight: 300;
+  color: #333;
+}
+
+.main .elements aside .sidebar {
+  position: fixed;
+  top: 0px;
+  height: 100%;
+  min-width: 300px;
+  max-width: 300px;
+  transition: all .4s ease;
+  background: #333;
+  color: white;
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 999;
+}
+
+.main .elements aside .sidebar-right {
+  right: -300px;
+}
+
+.main .elements aside .sidebar-right.active {
+  right: 0px;
+}
+
+.main .elements aside .sidebar-right .sb-close-r {
+  position: absolute;
+  top: 75px;
+  left: 10px;
+  height: 34px;
+  width: 34px;
+  cursor: pointer;
+}
+
+.main .elements aside .sidebar-right .sb-close-r:hover span {
+  color: #f9ae00;
+}
+
+.main .elements aside .sidebar-right .sb-close-r span {
+  line-height: 34px;
+  font-size: 3rem;
+  text-decoration: none;
+  color: white;
+}
+
+.main .elements aside .sidebar-right ul .title {
+  padding: 15px 10px 20px 10px;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.main .elements aside .sidebar-right ul .collapsible {
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  border-top: 1px solid white;
+  text-align: left;
+  font-size: 1.25rem;
+}
+
+.main .elements aside .sidebar-right ul .collapsible:after {
+  content: '\02795';
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+
+.main .elements aside .sidebar-right ul .collapsible:hover {
+  color: #f9ae01;
+}
+
+.main .elements aside .sidebar-right ul .collapsible.active {
+  color: #f9ae01;
+}
+
+.main .elements aside .sidebar-right ul .collapsible.active:after {
+  content: "\2796";
+}
+
+.main .elements aside .sidebar-right ul .content {
+  color: white;
+  font-size: 1.1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.main .elements aside .sidebar-right ul .content ul {
+  padding: 0;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list {
+  width: 100%;
+  list-style-type: none;
+  text-align: left;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  line-height: 1.9rem;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list.first {
+  padding-top: 10px;
+  border-top: dotted 1px white;
+}
+
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch {
+  top: 3px;
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch input:checked + .slider {
+  background-color: #f9ae00;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  transition: all .4s ease;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #333;
+  transition: all .4s ease;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch .slider.round {
+  border-radius: 34px;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .switch .slider.round:before {
+  border-radius: 50%;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .slidecontainer {
+  width: 95%;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .sliderb {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #e3e7ec;
+  opacity: 0.7;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .sliderb:hover {
+  opacity: 1;
+}
+
+.main .elements aside .sidebar-right ul .content ul .content-list .sliderb::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f9ae00;
+  cursor: pointer;
+}
+
+.main .elements aside .sidebar-left {
+  left: -300px;
+}
+
+.main .elements aside .sidebar-left.active {
+  left: 0px;
+}
+
+.main .elements aside .sidebar-left .sb-close-l {
+  position: absolute;
+  top: 75px;
+  right: 10px;
+  height: 34px;
+  width: 34px;
+  cursor: pointer;
+}
+
+.list-unstyled{
+  margin-top: 75px;
+}
+
+.main .elements aside .sidebar-left .sb-close-l:hover span {
+  color: #f9ae00;
+}
+
+.main .elements aside .sidebar-left .sb-close-l span {
+  line-height: 34px;
+  font-size: 3rem;
+  text-decoration: none;
+  color: white;
+}
+
+.main .elements aside .sidebar-left ul .title {
+  padding: 30px 10px 20px 10px;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  line-height: 1.7rem;
+}
+
+.main .elements aside .sidebar-left ul .sub-title {
+  padding: 10px 10px 10px 10px;
+  font-size: 1.25rem;
+  color: #f9ae00;
+}
+
+.main .elements aside .sidebar-left ul .sb-text {
+  font-size: 1.25rem;
+  line-height: 1.7rem;
+}
+
+.main .elements aside .sidebar-left ul .sb-img {
+  margin-bottom: 10px;
+}
+
+.main .elements aside .sidebar-left ul .sb-img img {
+  width: 250px;
+  height: 143px;
+}
+
+footer{
+  position: absolute;
+  top: 100vh;
+  z-index: -1;
+}
+
+@media (min-width: 500px) {
+  body.active1 {
+    right: 400px;
+  }
+  body.active2 {
+    left: 400px;
+  }
+  .main .elements aside .sidebar {
+    min-width: 400px;
+    max-width: 400px;
+  }
+  .main .elements aside .sidebar-right {
+    right: -400px;
+  }
+  .main .elements aside .sidebar-right ul .title {
+    font-size: 1.75rem;
+  }
+  .main .elements aside .sidebar-right ul .collapsible {
+    font-size: 1.5rem;
+  }
+  .main .elements aside .sidebar-right ul .content {
+    font-size: 1.35rem;
+  }
+  .main .elements aside .sidebar-left {
+    left: -400px;
+  }
+  .main .elements aside .sidebar-left .sb-close span {
+    line-height: 34px;
+    font-size: 3rem;
+  }
+  .main .elements aside .sidebar-left ul .title {
+    font-size: 1.725rem;
+  }
+  .main .elements aside .sidebar-left ul .sub-title {
+    font-size: 1.5rem;
+  }
+  .main .elements aside .sidebar-left ul .sb-text {
+    font-size: 1.5rem;
+  }
+  .main .elements aside .sidebar-left ul .sb-img img {
+    width: 350px;
+    height: 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  .main {
+    height: 96vh;
+  }
+  .main .elements #basemaps-wrapper {
+    top: 183px;
+  }
+  .main .elements .leaflet-top .leaflet-control {
+    margin-top: 223px;
+  }
+  .main .elements aside .btn-mapa {
+    top: 300px;
+  }
+  .contenido-pagina{
+    top: -133px;
+  }
+  .sb-close-l{
+    top: 110px !important;
+  }
+  .sb-close-r{
+    top: 110px !important;
+  }
+  .list-unstyled{
+    margin-top: 110px;
+  }
+}
+
+@media (min-width: 992px) {
+  .main {
+    height: 96vh;
+  }
+  .main .elements #basemaps-wrapper {
+    top: 183px;
+  }
+  .main .elements .leaflet-top .leaflet-control {
+    margin-top: 223px;
+  }
+  .main .elements aside .sidebar-left ul .title {
+    font-size: 2rem;
+  }
+  .main .elements aside .sidebar-left ul .sub-title {
+    font-size: 1.725rem;
+  }
+  .main .elements aside .sidebar-left ul .sb-text {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .main .elements aside .sidebar-left ul .sb-img img {
+    width: 350px;
+    height: 200px;
+  }
+}
+/*# sourceMappingURL=geomap.css.map */
