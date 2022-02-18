@@ -303,6 +303,7 @@ ul.dropdown-menu a:focus {
 	box-shadow: none;
 	text-transform: uppercase;
 	font-size: 1.125em;
+	margin-right: 5px;
 }
 
 #unalTop .btn-group .btn .caret {
@@ -310,8 +311,8 @@ ul.dropdown-menu a:focus {
 	margin-left: 6px;
 }
 
-#unalTop .btn-group:hover,
-#unalTop .btn-group.open {
+#unalTop .btn-default:hover,
+#unalTop .btn-default.open {
 	background-color: #666;
 	border-color: #333;
 }
@@ -319,8 +320,12 @@ ul.dropdown-menu a:focus {
 #unalTop .seal {
 	position: absolute;
 	right: 10px;
-	top: 35px;
+	top: 41px;
 	z-index: 2;
+	border-radius: 5%;
+}
+#unalTop .seal:hover {
+	cursor: pointer;
 }
 
 #unalTop .firstMenu {

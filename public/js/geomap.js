@@ -5,9 +5,8 @@ var mapaBase;
 var mapaBaseLabels;
 var openStreet;
 
-// Auxiliares Lógicos
+// Auxiliares carga marcadores
 var auxCargaInfoAflor=0;
-var auxMarcador=0;
 
 // Mapas WMS
 var atlasGeoWMS;
@@ -19,7 +18,7 @@ function Mapa(capa, active, transp) {
 var mapaGeo = new Mapa(null,0,0.5);
 var mapaFallas = new Mapa(null,0,0.5);
 
-// Planchas Zona de Estudio
+// Planchas Zona de Estudio y Sus Métodos
 function Plancha(capa, active, name, data) {
   this.capa = capa;
   this.active = active;
@@ -46,7 +45,8 @@ function CargarPlancha(Plancha) {
 }
 
 // Marcadores & Icono 
-var markerGroupCurso_2021_2;
+var markers=[];
+var layerMarkers=[];
 var aflorIcon = new L.Icon({
   iconUrl: 'images/geomap/icons/icon-aflor.png',
   shadowUrl: 'images/geomap/icons/marker-shadow.png',
@@ -215,7 +215,7 @@ $(document).ready(function () {
   }
 
   // Cargando y Dibujando Marcadores de Afloramientos
-  CargarMapa();
+  // setTimeout(CargarMapa, 1000);
 
   // Función que Controla los Acordeones de la Barra Derecha
   var coll = $(".collapsible");
@@ -235,35 +235,43 @@ $(document).ready(function () {
 
 // ................................Funciones para Cargar, Mostrar y Ocultar los Marcadores
 
-function CargarMapa() {
-
-  markerGroupCurso_2021_2 = L.layerGroup().addTo(map);
-
-  for (var i = 0; i < marca.length; i++) {
-    var marcador = marca[i];
-    var latlong = marcador.pos.split(", ");
-    var lat = parseFloat(latlong[0]);
-    var long = parseFloat(latlong[1]);
-    L.marker([lat, long], {
-      icon: aflorIcon
-    }).addTo(markerGroupCurso_2021_2)
-    .bindPopup(marcador.cod + " : " + marcador.nombre + "<br>" + marcador.pos).on('click', toggleBounce);
+function CargarMapa() {  
+  for (let i = 0; i < semestres["count"]; i++) {
+    var marks=[];
+    // Agrega las capas de marcadores
+    layerMarkers[i] = L.layerGroup().addTo(map);
+    for (let j = 0; j < marcadores[semestres["semestre_"+i]]["count"]; j++) {
+      marks[j] = marcadores[semestres["semestre_"+i]]["mark_"+j]; 
+      // Añade los marcadores a cada capa
+      var latlong = marks[j].pos.split(", ");
+      var lat = parseFloat(latlong[0]);
+      var long = parseFloat(latlong[1]);
+      L.marker([lat, long], {
+        icon: aflorIcon
+      }).addTo(layerMarkers[i])
+      .bindPopup(marks[j].cod + " : " + marks[j].nombre + "<br>" + marks[j].pos).on('click', toggleBounce);
+    }
+    markers[i]=marks;
+    //Dibuja las capas de semestres disponibles en la sidebar
+    $("#list_aflora").append(
+      '<li class="content-list">'+
+          '<label class="switch">'+
+              '<input type="checkbox" id="curso_' + i + '" onChange="borrarMarket(id)">'+
+              '<span class="slider round"></span>'+
+          '</label>'+
+          '<a> Curso ' + semestres["semestre_"+i] + '</a>'+
+      '</li>'
+    );
+    $("#curso_"+i).prop("checked", true);
   }
-
-  $("#curso_2021_2").prop("checked", true);
-
 }
 
 function borrarMarket(id) {
-
+  var num = id.split("_")
   if ($("#" + id).prop('checked')) {
-    if (id == "curso_2021_2") {
-      markerGroupCurso_2021_2.addTo(map);
-    }
+    layerMarkers[parseInt(num[1])].addTo(map);
   } else {
-    if (id == "curso_2021_2") {
-      map.removeLayer(markerGroupCurso_2021_2);
-    }
+      map.removeLayer(layerMarkers[parseInt(num[1])]);
   }
 }
 
@@ -305,42 +313,44 @@ function setBasemap(basemap) {
 
 // Funciones para Cargar la Info del Afloramiento Escogido
 function toggleBounce(e) {
-    var coo = this.getLatLng();
-    var coor = coo.lat + ", " + coo.lng;
-    for (var i = 0; i < marca.length; i++) {
-      if (marca[i].pos == coor) {
-        auxMarcador=marca[i];
+  var auxMarcador=0;
+  var coo = this.getLatLng();
+  var coor = coo.lat + ", " + coo.lng;
+  for (let i = 0; i < markers.length; i++) {
+    for (let j = 0; j < markers[i].length; j++) {
+      if (markers[i][j].pos == coor) {
+        auxMarcador=markers[i][j];
+        break;
       }
-    } 
-    if(auxCargaInfoAflor==0){
-      setTimeout(Recarga(), 100);
     }
-    if (auxMarcador==auxCargaInfoAflor) {
-      setTimeout(Recarga(), 100);
-    }else{
-      auxCargaInfoAflor=auxMarcador;
-    }
-    CargarLado();   
+  }
+  if(auxCargaInfoAflor==0){
+    setTimeout(Recarga(), 100);
+  }
+  if (auxMarcador==auxCargaInfoAflor) {
+    setTimeout(Recarga(), 100);
+  }else{
+    auxCargaInfoAflor=auxMarcador;
+  }
+  CargarLado(auxMarcador);   
 }
 
-function CargarLado() {
-  var mark2 = auxMarcador;
-  $('#titulo').html(''+ mark2.nombre);
-  $('#descrigene').html(''+mark2.descrigene);
-  $('#descriaflor').html(''+mark2.descriaflor);
-  $('#descriestruct').html(''+mark2.descriestruct);
-  $('#descrimeteor').html(''+mark2.descrimeteor);
-  $('#descrimacro').html(''+mark2.descrimacro);
-  $('#descrimacro1').html(''+mark2.descrimacro1);
-  $('#descrimacro2').html(''+mark2.descrimacro2);
-  $('#recolectors').html(''+mark2.recolectors);
-  $('#fecha').html(''+mark2.fecha);
-  $("#aflor1").attr('src' , 'images/geomap/' + mark2.cod + '/aflor.jpg').addClass("img-fluid");
-  $("#aflor2").attr('src' , 'images/geomap/' + mark2.cod + '/aflorzoom.jpg').addClass("img-fluid");
-  $("#macro1").attr('src' , 'images/geomap/' + mark2.cod + '/macro.jpg').addClass("img-fluid");
-  $("#macro2").attr('src' , 'images/geomap/' + mark2.cod + '/macro1.jpg').addClass("img-fluid");
-  $("#macro3").attr('src' , 'images/geomap/' + mark2.cod + '/macro2.jpg').addClass("img-fluid");
-  $("#macro3").attr('src' , 'images/geomap/' + mark2.cod + '/macro2.jpg').addClass("img-fluid");
+function CargarLado(auxMark) {
+  $('#titulo').html(''+ auxMark.nombre);
+  $('#descrigene').html(''+auxMark.descrigene);
+  $('#descriaflor').html(''+auxMark.descriaflor);
+  $('#descriestruct').html(''+auxMark.descriestruct);
+  $('#descrimeteor').html(''+auxMark.descrimeteor);
+  $('#descrimacro').html(''+auxMark.descrimacro);
+  $('#descrimacro1').html(''+auxMark.descrimacro1);
+  $('#descrimacro2').html(''+auxMark.descrimacro2);
+  $('#recolectors').html(''+auxMark.recolectors);
+  $('#fecha').html(''+auxMark.fecha);
+  $("#aflor1").attr('src' , auxMark.aflor);
+  $("#aflor2").attr('src' , auxMark.aflorzoom);
+  $("#macro1").attr('src' , auxMark.roca_0);
+  $("#macro2").attr('src' , auxMark.roca_1);
+  $("#macro3").attr('src' , auxMark.roca_2);
 }
 
 function Recarga() {

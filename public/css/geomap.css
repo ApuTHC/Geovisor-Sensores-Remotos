@@ -5,6 +5,47 @@
   z-index: -1;
 }
 
+#user-photo{
+  border-radius: 50%;
+}
+
+#foto-perfil{
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.modal-content{
+  background-color: #fff0;
+}
+
+#modal-perfil-container{
+  text-align: center;
+}
+
+.modal-header{
+  background: #666;
+  color: white;
+  border: none;
+}
+
+.close{
+  color: white;
+}
+.close:hover{
+  color: white;
+}
+
+.modal-body{
+  background: url(../images/navigationBack.png);
+  color: white;
+}
+
+.modal-footer{
+  background: #666;
+  padding: 8px;
+  border: none;
+}
+
 .inp_plancha{
   display: inline-block;
   width: auto;
