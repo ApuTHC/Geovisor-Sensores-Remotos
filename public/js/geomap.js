@@ -59,13 +59,6 @@ var aflorIcon = new L.Icon({
 // ................................Función PPAL
 
 $(document).ready(function () {
-  // Ajustando el mapa
-  $('.map').css('height', $('footer').offset().top+26);
-  $(".sidebar").css('height', $('footer').offset().bottom);
-  $(window).resize(function () { 
-    $('.map').css('height', $('footer').offset().top+1);
-    $(".sidebar").css('height', $('footer').offset().bottom);
-  });
 
   // Cargando Mapa Base
   map = L.map('map').setView([5.917053, -75.655911], 13);
@@ -76,8 +69,76 @@ $(document).ready(function () {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
   });
+  google = L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+            attribution: 'Google'
+  });
+
+    drawnItems = L.featureGroup().addTo(map);
+    map.addControl(new L.Control.Draw({
+        draw: {
+          position: 'topleft',
+          polygon: {
+            title: 'Draw a sexy polygon!',
+            allowIntersection: false,
+            drawError: {
+              color: '#b00b00',
+              timeout: 1000
+            },
+            shapeOptions: {
+              color: '#bada55'
+            },
+            showArea: true
+          },
+          polyline: {
+            metric: true
+          },
+          circle: {
+            shapeOptions: {
+              color: '#662d91'
+            }
+          }
+        },
+        edit: {
+          featureGroup: drawnItems,
+          poly: {
+            allowIntersection: false
+        }
+        }
+    }));
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+        // console.log(JSON.parse('true'));
+        lgeojson = layer.toGeoJSON();
+        L.extend(lgeojson.properties, {
+          nombre: "esto es una figura",
+          codigo: "1020554"
+        });
+        console.log(lgeojson);
+        database.ref('features/feature_' + 1).set({
+          lgeojson
+        });
+        drawnItems.addLayer(layer);
+        console.log(drawnItems);
+    });
 
 
+    let forms = {
+      'geometry': {
+        'dashArray': (elem) => {return elem instanceof L.Polygon},
+        'color': true,
+        'weight': true
+      }
+    }
+    var styleCtrl = L.control.styleEditor({
+      openOnLeafletDraw: true,
+      showTooltip: false,
+      position: 'topleft',
+      useGrouping: false
+    });
+    map.addControl(styleCtrl);
+
+    
   // Cargando Atlas Geológico y PopUp de Descripción
   var MySource = L.WMS.Source.extend({
     'showFeatureInfo': function (latlng, info) {
@@ -214,9 +275,6 @@ $(document).ready(function () {
     });
   }
 
-  // Cargando y Dibujando Marcadores de Afloramientos
-  // setTimeout(CargarMapa, 1000);
-
   // Función que Controla los Acordeones de la Barra Derecha
   var coll = $(".collapsible");
   for (let i = 0; i < coll.length; i++) {
@@ -235,7 +293,7 @@ $(document).ready(function () {
 
 // ................................Funciones para Cargar, Mostrar y Ocultar los Marcadores
 
-function CargarMapa() {  
+function CargarInfo() {  
   for (let i = 0; i < semestres["count"]; i++) {
     var marks=[];
     // Agrega las capas de marcadores
@@ -285,12 +343,15 @@ function setBasemap(basemap) {
     map.removeLayer(mapaBase);
   }
 
-  if (basemap != 'Street') {
+  if (basemap != 'Street' && basemap != 'Google' ) {
     mapaBase = L.esri.basemapLayer(basemap);
   }
 
   if (basemap == 'Street') {
     mapaBase = openStreet;
+  }
+  if (basemap == 'Google') {
+    mapaBase = google;
   }
 
   map.addLayer(mapaBase);
@@ -341,16 +402,17 @@ function CargarLado(auxMark) {
   $('#descriaflor').html(''+auxMark.descriaflor);
   $('#descriestruct').html(''+auxMark.descriestruct);
   $('#descrimeteor').html(''+auxMark.descrimeteor);
-  $('#descrimacro').html(''+auxMark.descrimacro);
-  $('#descrimacro1').html(''+auxMark.descrimacro1);
-  $('#descrimacro2').html(''+auxMark.descrimacro2);
   $('#recolectors').html(''+auxMark.recolectors);
   $('#fecha').html(''+auxMark.fecha);
   $("#aflor1").attr('src' , auxMark.aflor);
   $("#aflor2").attr('src' , auxMark.aflorzoom);
-  $("#macro1").attr('src' , auxMark.roca_0);
-  $("#macro2").attr('src' , auxMark.roca_1);
-  $("#macro3").attr('src' , auxMark.roca_2);
+  $("#rocas").empty();
+  for (let i = 0; i < auxMark.rocas; i++) {
+    $("#rocas").append(
+      '<li class="sb-img"><img id="macro_'+i+'" src="'+auxMark['roca_'+i]+'"></li>'+
+      '<li class="sb-text" id="descri_roca_'+i+'"> '+auxMark['descri_roca_'+i]+'</li>'
+    );
+  }
 }
 
 function Recarga() {

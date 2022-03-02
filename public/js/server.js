@@ -108,7 +108,7 @@ var uiConfig = {
 
   function dbReady() {
     if (auxSemester && auxMark) {
-      CargarMapa();
+      CargarInfo();
     }
   }
 

@@ -1,0 +1,455 @@
+#user-photo{
+  border-radius: 50%;
+}
+
+
+.but {
+    background: rgba(51, 51, 51, 0.85);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 5px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: all 500ms ease;
+    font-weight: 200;
+    font-size: 0.9rem;
+}
+
+.but:hover {
+  color: #f9ae00 !important;
+}
+  
+  .contenido-pagina{
+    position: absolute;
+    top: -90px;
+    width: 100%;
+    z-index: -1;
+  }
+  
+  main.detalle {
+      margin: 0;
+    z-index: 0;
+  }
+  
+  .main {
+    width: 100%;
+    margin-top: 0px;
+  }
+  
+  .main-banner .banner-principal {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    height: 100vh;
+    background-image: url("../images/geomap/E02-G2-21-02/aflorzoom.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: -10;
+    transition: all .4s ease;
+  }
+  
+  .main-banner .banner-principal .banner {
+    background: rgba(0, 0, 0, 0.65);
+    width: 100%;
+    height: 100%;
+  }
+  
+  .main .elements {
+    margin-top: 140px;
+    text-align: center;
+    transition: all .4s ease;
+  }
+  
+  .main .elements .timeline {
+    transition: all .4s ease;
+  }
+  
+  .main .elements .timeline .timeline-header {
+    transition: all .4s ease;
+
+    color: #fff1ce;
+  }
+  
+  .main .elements .timeline .timeline-header h1 {
+    transition: all .4s ease;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    text-shadow: 1px 1px 0.05em #f9ae00;
+  }
+  .main .elements .timeline .timeline-header h2 {
+    color: #f9ae00;
+    font-size: 2rem;
+  }
+  
+  .main .elements .timeline .timeline-header h3 {
+    text-shadow: 3px 3px 0.1em #422613;
+  }
+  
+  .main .elements .timeline .timeline-header h4 {
+    text-shadow: 3px 3px 0.1em #422613;
+  }
+  
+  .main .elements .timeline .timeline-main {
+    transition: all .4s ease;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item {
+    transition: all .4s ease;
+    color: #fff1ce;
+    margin: 100px 0;
+  }
+  .main .elements .timeline .timeline-main .timeline-item-2 {
+    transition: all .4s ease;
+    color: #fff1ce;
+    margin: 50px 0 0 0;
+  }
+  .main .elements .timeline .timeline-main .timeline-item-1 {
+    transition: all .4s ease;
+    color: #fff1ce;
+    margin: 20px 0;
+  }
+
+  .main .elements .timeline .timeline-main .timeline-item-1 .año h2 {
+    font-size: 2rem;
+    color: #f9ae00;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .año {
+    text-shadow: 0.05em 0.05em 0.05em #f9ae00;
+    margin-bottom: 30px;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .año h2 {
+    font-size: 2rem;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .descript {
+    font-size: 1.25rem;
+    align-self: center;
+    line-height: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .descript p {
+    margin: 0;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .foto {
+    align-self: center;
+    transition: all .4s ease;
+    margin-bottom: 10px;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .foto img {
+    
+    width: 90%;
+  }
+  
+  .main .elements .timeline .timeline-main .timeline-item .foto p {
+    font-size: 1rem;
+  }
+  
+
+  
+  .main .elements .timeline .timeline-main .linea0 {
+    margin-bottom: 200px;
+  }
+  
+  .main .elements .gotop {
+    transition: all .4s ease;
+    position: fixed;
+    bottom: 30px;
+    right: 10px;
+    display: flex;
+    background: #f9ae009d;
+    height: 30px;
+    width: 30px;
+    border-radius: 30%;
+    margin-right: -60px;
+    z-index: 1000;
+    cursor: pointer;
+  }
+  
+  .main .elements .gotop a {
+    text-align: center;
+    margin: auto;
+    align-self: center;
+    color: #fff1ce;
+  }
+  
+  .main .elements .lineaindice {
+    position: fixed;
+    top: 10px;
+    left: 5px;
+    color: #fff1ce;
+    height: 97%;
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: end;
+    justify-content: center;
+    margin-left: -25px;
+    transition: all .4s ease;
+    z-index: 9999;
+  }
+  
+  .main .elements .lineaindice h4 {
+    text-shadow: 1px 1px 0.1em #f9ae00;
+    transition: all .4s ease;
+    transform: rotate(-90deg);
+  }
+  
+  .main .elements .lineamenu {
+    position: fixed;
+    top: 10px;
+    left: -3px;
+    height: 97%;
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+    transition: all .4s ease;
+    z-index: 9999;
+    padding-right: 70px;
+  }
+  
+  .main .elements .lineamenu a {
+    text-shadow: 2px 2px 0.1em #422613;
+    transition: all .4s ease;
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #fff1ce;
+    margin-left: -200px;
+  }
+  
+  .main .elements .lineamenu a:hover {
+    transform: scale(1.2);
+  }
+  
+  .footer-banner {
+    position: absolute;
+  }
+  
+  footer {
+    position: absolute;
+  }
+  
+  @media (min-width: 576px) {
+    .main .elements {
+      margin-top: 130px;
+    }
+    .main .elements .timeline .timeline-header h1 {
+      transition: all .4s ease;
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-header h2 {
+      transition: all .4s ease;
+      font-size: 2.2rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item {
+      margin: 100px 0;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .año h2 {
+      font-size: 2rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript {
+      font-size: 1.4rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto img {
+      width: 90%;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto p {
+      font-size: 1.2rem;
+    }
+    .main .elements .timeline .timeline-main .linea0 {
+      margin-bottom: 200px;
+    }
+    .main .elements .gotop {
+      height: 40px;
+      width: 40px;
+    }
+    .main .elements .gotop a {
+      font-size: 1.2rem;
+    }
+    .main .elements .lineaindice h4 {
+      font-size: 2rem;
+    }
+    .main .elements .lineamenu {
+      left: -3px;
+    }
+    .main .elements .lineamenu a {
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .main .elements {
+      margin-top: 150px;
+    }
+    .main .elements .timeline .timeline-header h1 {
+      font-size: 3.5rem;
+    }
+    .main .elements .timeline .timeline-header h2 {
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-header h3 {
+      font-size: 2rem;
+    }
+    .main .elements .timeline .timeline-header h4 {
+      font-size: 1.7rem;
+    }
+    .main .elements .timeline .timeline-main {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .main .elements .timeline .timeline-main .timeline-item {
+      margin: 100px 0;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .año h2 {
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript {
+      font-size: 1.45rem;
+      line-height: 1.7rem;
+      border-right: 2px solid #f9ae00;
+      text-align: end;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript.order-2 {
+      text-align: initial;
+      border-left: 2px solid #f9ae00;
+      border-right: none;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto img {
+      width: 100%;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto p {
+      font-size: 1.3rem;
+    }
+    .main .elements .timeline .timeline-main .linea0 {
+      margin-bottom: 200px;
+    }
+    .main .elements .timeline .timeline-main .linea0 .descript {
+      border: none;
+    }
+    .main .elements .timeline .timeline-main .linea0 p {
+      text-align: center;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .main .elements {
+      margin-top: 210px;
+    }
+    .main .elements .timeline .timeline-header h1 {
+      font-size: 4rem;
+    }
+    .main .elements .timeline .timeline-header h2 {
+      font-size: 3rem;
+    }
+    .main .elements .timeline .timeline-header h3 {
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-header h4 {
+      font-size: 2rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item {
+      margin: 100px 0;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .año h2 {
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript {
+      font-size: 1.8rem;
+      border-right: 2px solid #f9ae00;
+      text-align: end;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript.order-2 {
+      text-align: initial;
+      border-left: 2px solid #f9ae00;
+      border-right: none;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto img {
+      width: 100%;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto p {
+      font-size: 1.3rem;
+    }
+    .main .elements .timeline .timeline-main .linea0 {
+      margin-bottom: 200px;
+    }
+    .main .elements .timeline .timeline-main .linea0 .descript {
+      border: none;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .main .elements {
+      margin-top: 200px;
+    }
+    .main .elements .timeline .timeline-header h1 {
+      font-size: 4.5rem;
+    }
+    .main .elements .timeline .timeline-header h2 {
+      font-size: 3.2rem;
+    }
+    .main .elements .timeline .timeline-header h3 {
+      font-size: 3rem;
+    }
+    .main .elements .timeline .timeline-header h4 {
+      font-size: 2.3rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item {
+      margin: 100px 0;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .año h2 {
+      font-size: 2.5rem;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript {
+      font-size: 1.8rem;
+      border-right: 2px solid #f9ae00;
+      text-align: end;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .descript.order-2 {
+      text-align: initial;
+      border-left: 2px solid #f9ae00;
+      border-right: none;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto img {
+      width: 100%;
+    }
+    .main .elements .timeline .timeline-main .timeline-item .foto p {
+      font-size: 1.4rem;
+    }
+    .main .elements .timeline .timeline-main .linea0 {
+      margin-bottom: 200px;
+    }
+    .main .elements .timeline .timeline-main .linea0 .descript {
+      border: none;
+    }
+    .main .elements .gotop {
+      height: 50px;
+      width: 50px;
+    }
+    .main .elements .gotop a {
+      font-size: 1.5rem;
+    }
+  }
+
+
+  
+.descrigene{
+  font-size: 1.4rem;
+  text-shadow: none;
+}
+  

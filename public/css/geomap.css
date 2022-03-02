@@ -1,6 +1,6 @@
 .contenido-pagina{
-  position: absolute;
-  top: -90px;
+  position: fixed;
+  top: 0px;
   width: 100%;
   z-index: -1;
 }
@@ -455,7 +455,7 @@ footer{
 
 @media (min-width: 768px) {
   .main {
-    height: 96vh;
+    height: 100vh;
   }
   .main .elements #basemaps-wrapper {
     top: 183px;
@@ -465,9 +465,6 @@ footer{
   }
   .main .elements aside .btn-mapa {
     top: 300px;
-  }
-  .contenido-pagina{
-    top: -133px;
   }
   .sb-close-l{
     top: 110px !important;
@@ -482,7 +479,7 @@ footer{
 
 @media (min-width: 992px) {
   .main {
-    height: 96vh;
+    height: 100vh;
   }
   .main .elements #basemaps-wrapper {
     top: 183px;
