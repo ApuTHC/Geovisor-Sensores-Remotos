@@ -155,36 +155,75 @@
                     <!-- Sidebar Izquierda -->
                     <aside class="out">
                         <div class="btn-mapa btn-afloramiento">
-                            <div class="btn-text">Afloramiento</div>
+                            <div class="btn-text">Formulario</div>
                         </div>
                         <div class="sidebar sidebar-left">
-                            <div class=sb-close-l>
-                                <span>&times;</span>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li class="title" id="titulo">Elija el Afloramiento</li>
-                                <li class="sub-title">Ubicación del Afloramiento</li>
-                                <li class="sb-text" id="descrigene"> Ubicación Afloramiento</li>
-                                <li><img class="img-fluid" id="aflor1"></li>
-                                <li class="sub-title">Descripción del Afloramiento</li>
-                                <li class="sb-text" id="descriaflor"> Descripción Afloramiento</li>
-                                <li class="sub-title">Estructuras del Afloramiento</li>
-                                <li class="sb-text" id="descriestruct"> Estructuras Afloramiento</li>
-                                <li class="last-img"><img class="img-fluid" id="aflor2"></li>
-                                <li class="sub-title">Meteorización del Afloramiento</li>
-                                <li class="sb-text" id="descrimeteor"> Meteorización Afloramiento</li>
-                                <li class="sub-title">Descripción Litologías</li>
-                                <div id="rocas">
-
+                            <div id="afloras" class="d-none">
+                                <div class=sb-close-l>
+                                    <span>&times;</span>
                                 </div>
-                                <li class="sub-title">Equipo de Trabajo</li>
-                                <li class="sb-text" id="recolectors"> Recolectores</li>
-                                <li class="sub-title">Fecha</li>
-                                <li class="sb-text" id="fecha"> Fecha</li>
-                            </ul>
+                                <ul class="list-unstyled">
+                                    <li class="title" id="titulo">Elija el Afloramiento</li>
+                                    <li class="sub-title">Ubicación del Afloramiento</li>
+                                    <li class="sb-text" id="descrigene"> Ubicación Afloramiento</li>
+                                    <li><img class="img-fluid" id="aflor1"></li>
+                                    <li class="sub-title">Descripción del Afloramiento</li>
+                                    <li class="sb-text" id="descriaflor"> Descripción Afloramiento</li>
+                                    <li class="sub-title">Estructuras del Afloramiento</li>
+                                    <li class="sb-text" id="descriestruct"> Estructuras Afloramiento</li>
+                                    <li class="last-img"><img class="img-fluid" id="aflor2"></li>
+                                    <li class="sub-title">Meteorización del Afloramiento</li>
+                                    <li class="sb-text" id="descrimeteor"> Meteorización Afloramiento</li>
+                                    <li class="sub-title">Descripción Litologías</li>
+                                    <div id="rocas">
+    
+                                    </div>
+                                    <li class="sub-title">Equipo de Trabajo</li>
+                                    <li class="sb-text" id="recolectors"> Recolectores</li>
+                                    <li class="sub-title">Fecha</li>
+                                    <li class="sb-text" id="fecha"> Fecha</li>
+                                </ul>
+                            </div>
+                            <div id="features" class="features">
+                                <div class=sb-close-l>
+                                    <span>&times;</span>
+                                </div>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="featClass">Clase</label>
+                                        <select class="form-control" id="featClass">
+                                            <option>Procesos Morfodinámicos</option>
+                                            <option>Unidades Geomorfológicas</option>
+                                            <option>Unidades Geológicas</option>
+                                            <option>Estructuras</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="featName">Nombre</label>
+                                        <input type="text" class="form-control" id="featName" placeholder="Nombre" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="featCod">Codigo</label>
+                                        <input type="text" class="form-control" id="featCod" placeholder="0001" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="featZone">Zona</label>
+                                        <input type="text" class="form-control" id="featZone" placeholder="Rio Sucio" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="featDescrip">Descripción General</label>
+                                        <textarea class="form-control" id="featDescrip" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="featProp">Propietario</label>
+                                        <input type="text" class="form-control" id="featProp" placeholder="¿Quién la Dibujó?" required>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="featSave">Guardar</button>
+                                </form>
+                            </div>
                         </div>
                     </aside>
-
+                    
                     <!-- Sidebar Derecha -->
                     <aside class="out">
                         <div class="btn-mapa btn-capas">
@@ -407,6 +446,8 @@
     </div>
 
     <!-- Scripts -->
+
+    <!-- GeoJSON's de las planchas -->
     <div id="planchas">
         <script src="data/PlanchaC1N.js"></script>
         <script src="data/PlanchaC1S.js"></script>
@@ -417,29 +458,32 @@
         <script src="data/PlanchaC4N.js"></script>
         <script src="data/PlanchaC4S.js"></script>
     </div>
+
+    <!-- Leaflet -->
     <script src="js/leaflet.js"></script>
     <script src="js/leaflet.wms.js"></script>
     <script src="js/esri-leaflet.js"></script>
     <script src="js/L.KML.js"></script>
+
+    <!-- ColorPicker -->
     <script src="js/bootstrap-colorpicker.js"></script>
 
+    <!-- Leaflet Style Editor -->
     <script src="js/Leaflet.StyleEditor.js"></script>
     <link rel="stylesheet" href="css/Leaflet.StyleEditor.css" />
 
+    <!-- Leaflet Draw -->
     <script src="src/Leaflet.draw.js"></script>
     <script src="src/Leaflet.Draw.Event.js"></script>
     <link rel="stylesheet" href="src/leaflet.draw.css" />
-
     <script src="src/Toolbar.js"></script>
     <script src="src/Tooltip.js"></script>
-
     <script src="src/ext/GeometryUtil.js"></script>
     <script src="src/ext/LatLngUtil.js"></script>
     <script src="src/ext/LineUtil.Intersect.js"></script>
     <script src="src/ext/Polygon.Intersect.js"></script>
     <script src="src/ext/Polyline.Intersect.js"></script>
     <script src="src/ext/TouchEvents.js"></script>
-
     <script src="src/draw/DrawToolbar.js"></script>
     <script src="src/draw/handler/Draw.Feature.js"></script>
     <script src="src/draw/handler/Draw.SimpleShape.js"></script>
@@ -449,14 +493,10 @@
     <script src="src/draw/handler/Draw.CircleMarker.js"></script>
     <script src="src/draw/handler/Draw.Polygon.js"></script>
     <script src="src/draw/handler/Draw.Rectangle.js"></script>
-
-
     <script src="src/edit/EditToolbar.js"></script>
     <script src="src/edit/handler/EditToolbar.Edit.js"></script>
     <script src="src/edit/handler/EditToolbar.Delete.js"></script>
-
     <script src="src/Control.Draw.js"></script>
-
     <script src="src/edit/handler/Edit.Poly.js"></script>
     <script src="src/edit/handler/Edit.SimpleShape.js"></script>
     <script src="src/edit/handler/Edit.Rectangle.js"></script>
@@ -464,7 +504,7 @@
     <script src="src/edit/handler/Edit.CircleMarker.js"></script>
     <script src="src/edit/handler/Edit.Circle.js"></script>
 
-
+    <!-- Scripts Firebase -->
     <script src="js/firebase-app-compat.js"></script>
     <script src="js/firebase-database-compat.js"></script>
     <script src="js/firebase-storage-compat.js"></script>

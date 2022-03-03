@@ -1,3 +1,16 @@
+.features{
+  margin-top: 160px;
+  padding: 0 50px;
+}
+
+.features label{
+  font-size: 1.3rem;
+  color:#f9ae00
+}
+
+
+
+
 .contenido-pagina{
   position: fixed;
   top: 0px;

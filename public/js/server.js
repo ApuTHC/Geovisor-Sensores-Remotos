@@ -55,7 +55,7 @@ var uiConfig = {
             uid : uid
           });
 
-          database.ref().child("marcadores").get().then((snapshot) => {
+          database.ref().child("features").get().then((snapshot) => {
             if (snapshot.exists()) {
               marcadores = snapshot.val();
               auxMark = true;
