@@ -63,7 +63,7 @@ $(document).ready(function () {
 
   // Cargando Mapa Base
   map = L.map('map').setView([5.398812, -75.529118], 11);
-  mapaBase = L.esri.basemapLayer('Imagery').addTo(map);
+  // mapaBase = L.esri.basemapLayer('Imagery').addTo(map);
   mapaBaseLabels = L.esri.basemapLayer('ImageryLabels');
   map.addLayer(mapaBaseLabels);
   openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -71,8 +71,11 @@ $(document).ready(function () {
     maxZoom: 18
   });
   google = L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-            attribution: 'Google'
+            attribution: 'Google',
+            maxZoom: 21
   });
+
+  setBasemap("Google");
 
   // Cargando el DRAW
   drawnItems = L.featureGroup().addTo(map);
@@ -333,7 +336,7 @@ $("#featSave").click(function (e) {
         database.ref('features/' + clase+'/feature_'+aux["count"]).set({
           layergeojson : layergeojson
         });
-        alert("Guardado con exito");
+        alert("Guardado con Éxito");
       } else {
         console.log("No data available");
       }
@@ -417,6 +420,8 @@ function CargarInfo() {
           weight: 3
         }).bindPopup(marks[j].properties.nombre).addTo(layerMarkers[i]).on('click', EditExist);
     }
+    console.log(layerMarkers[i].toGeoJSON());
+    console.log("jsjs");
     markers[i]=marks;
     //Dibuja las capas de semestres disponibles en la sidebar
     $("#list_aflora").append(
@@ -460,6 +465,8 @@ function setBasemap(basemap) {
   }
   if (basemap == 'Google') {
     mapaBase = google;
+    mapaBaseLabels = L.esri.basemapLayer('ImageryLabels');
+    map.addLayer(mapaBaseLabels);
   }
 
   map.addLayer(mapaBase);

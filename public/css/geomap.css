@@ -8,7 +8,13 @@
   color:#f9ae00
 }
 
-
+div.leaflet-marker-icon{
+  margin-left: -4px !important;
+  margin-top: -4px !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50%;
+}
 
 
 .contenido-pagina{
