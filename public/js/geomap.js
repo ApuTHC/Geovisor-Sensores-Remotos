@@ -62,7 +62,7 @@ var aflorIcon = new L.Icon({
 $(document).ready(function () {
 
   // Cargando Mapa Base
-  map = L.map('map').setView([5.398812, -75.529118], 11);
+  map = L.map('map').setView([5.917053, -75.655911], 13);
   // mapaBase = L.esri.basemapLayer('Imagery').addTo(map);
   mapaBaseLabels = L.esri.basemapLayer('ImageryLabels');
   map.addLayer(mapaBaseLabels);
@@ -76,6 +76,26 @@ $(document).ready(function () {
   });
 
   setBasemap("Google");
+
+  L.control.scale({
+    metric: true,
+    imperial: false,
+    position: 'bottomleft'
+  }).addTo(map);
+
+  L.control.Watermark = L.Control.extend({
+    onAdd:function(map){
+      var img = L.DomUtil.create('img');
+      img.src = '../public/images/LOGO_FINAL_V2.png';
+      img.style.width = '80px';
+      return img;
+    },
+    onRemove:function(map){},
+  });
+  L.control.watermark = function(opts){
+    return new L.control.Watermark(opts);
+  }
+  L.control.watermark({position:'bottomright'}).addTo(map);
 
   // Cargando el DRAW
   drawnItems = L.featureGroup().addTo(map);
@@ -284,144 +304,25 @@ $(document).ready(function () {
 
 
 
-// ................................Funciones del formulario
-
-function EditParameters() {
-  Recarga();
-  layergeojson = this.toGeoJSON();
-}
-function EditExist() {
-  // Recarga();
-  // console.log(this.toGeoJSON());
-  // layergeojson = this;
-}
-
-$("#featSave").click(function (e) { 
-  e.preventDefault();
-  let date = new Date();
-  var fecha = date.toISOString().split('T')[0];
-  var clase='';
-
-  switch ($("#featClass").val()) {
-    case "Procesos Morfodinámicos":
-      clase = 'procesos';
-      break;
-    case "Unidades Geomorfológicas":
-      clase = 'geomorfo';
-      break;
-    case "Unidades Geológicas":
-      clase = 'geologia';
-      break;
-    default:
-      clase = 'estructuras';
-      break;
-  }
-
-  if ($("#featName").val() !== '' && $("#featCod").val() !== '' && $("#featZone").val() !== '' && $("#featProp").val() !== ''&& layergeojson !== null) {
-    L.extend(layergeojson.properties, {
-      nombre: $("#featName").val(),
-      codigo: $("#featCod").val(),
-      zona: $("#featZone").val(),
-      propietario: $("#featProp").val(),
-      descripcion: $("#featDescrip").val(),
-      fecha: fecha
-    });
-    database.ref().child("features/"+clase+'/count').get().then((snapshot) => {
-      if (snapshot.exists()) {
-        var aux = snapshot.val();
-        var newCount = parseInt(aux["count"])+1;
-        database.ref('features/' + clase+'/count').set({
-          count : newCount
-        });
-        database.ref('features/' + clase+'/feature_'+aux["count"]).set({
-          layergeojson : layergeojson
-        });
-        alert("Guardado con Éxito");
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-    
-  }
-  if (layergeojson == null) {
-    alert("Seleccione la figura a guardar")
-  }
-});
-
-
-
-
-
 
 // ................................Funciones para Cargar, Mostrar y Ocultar los Marcadores
 
 function CargarInfo() {  
-  // for (let i = 0; i < semestres["count"]; i++) {
-  //   var marks=[];
-  //   // Agrega las capas de marcadores
-  //   layerMarkers[i] = L.layerGroup().addTo(map);
-  //   for (let j = 0; j < marcadores[semestres["semestre_"+i]]["count"]; j++) {
-  //     marks[j] = marcadores[semestres["semestre_"+i]]["mark_"+j]; 
-  //     // Añade los marcadores a cada capa
-  //     var latlong = marks[j].pos.split(", ");
-  //     var lat = parseFloat(latlong[0]);
-  //     var long = parseFloat(latlong[1]);
-  //     L.marker([lat, long], {
-  //       icon: aflorIcon
-  //     }).addTo(layerMarkers[i])
-  //     .bindPopup(marks[j].cod + " : " + marks[j].nombre + "<br>" + marks[j].pos).on('click', toggleBounce);
-  //   }
-  //   markers[i]=marks;
-  //   //Dibuja las capas de semestres disponibles en la sidebar
-  //   $("#list_aflora").append(
-  //     '<li class="content-list">'+
-  //         '<label class="switch">'+
-  //             '<input type="checkbox" id="curso_' + i + '" onChange="borrarMarket(id)">'+
-  //             '<span class="slider round"></span>'+
-  //         '</label>'+
-  //         '<a> Curso ' + semestres["semestre_"+i] + '</a>'+
-  //     '</li>'
-  //   );
-  //   $("#curso_"+i).prop("checked", true);
-  // }
-
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < semestres["count"]; i++) {
     var marks=[];
-    var clase;
-    var nombre
-    switch (i) {
-      case 0:
-        clase = 'procesos';
-        nombre = "Procesos Morfodinámicos";
-        break;
-        case 1:
-          clase = 'geomorfo';
-          nombre = "Unidades Geomorfológicas";
-        break;
-        case 2:
-          clase = 'geologia';
-          nombre = "Unidades Geológicas";
-        break;
-        default:
-          clase = 'estructuras';
-          nombre = "Estructuras";
-        break;
-    }
     // Agrega las capas de marcadores
     layerMarkers[i] = L.layerGroup().addTo(map);
-    
-    for (let j = 0; j < marcadores[clase]["count"]["count"]; j++) {
-      marks[j] = marcadores[clase]["feature_"+j]["layergeojson"]; 
+    for (let j = 0; j < marcadores[semestres["semestre_"+i]]["count"]; j++) {
+      marks[j] = marcadores[semestres["semestre_"+i]]["mark_"+j]; 
       // Añade los marcadores a cada capa
-      L.geoJson(marks[j])
-        .setStyle({
-          weight: 3
-        }).bindPopup(marks[j].properties.nombre).addTo(layerMarkers[i]).on('click', EditExist);
+      var latlong = marks[j].pos.split(", ");
+      var lat = parseFloat(latlong[0]);
+      var long = parseFloat(latlong[1]);
+      L.marker([lat, long], {
+        icon: aflorIcon
+      }).addTo(layerMarkers[i])
+      .bindPopup(marks[j].cod + " : " + marks[j].nombre + "<br>" + marks[j].pos).on('click', toggleBounce);
     }
-    console.log(layerMarkers[i].toGeoJSON());
-    console.log("jsjs");
     markers[i]=marks;
     //Dibuja las capas de semestres disponibles en la sidebar
     $("#list_aflora").append(
@@ -430,7 +331,7 @@ function CargarInfo() {
               '<input type="checkbox" id="curso_' + i + '" onChange="borrarMarket(id)">'+
               '<span class="slider round"></span>'+
           '</label>'+
-          '<a>  ' + nombre + '</a>'+
+          '<a> Curso ' + semestres["semestre_"+i] + '</a>'+
       '</li>'
     );
     $("#curso_"+i).prop("checked", true);
