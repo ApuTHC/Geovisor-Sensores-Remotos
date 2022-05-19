@@ -275,6 +275,14 @@ ul.dropdown-menu a:focus {
 	z-index: 1;
 }
 
+#unalTop .logo-header-sgc{
+	float: right;
+	right: 0px;
+	margin-left: 0;
+	margin-right: 10px;
+	transform: scaleX(-1);
+}
+
 #unalTop .logo img,
 #unalTop .logo svg {
 	-webkit-transition: width .5s;
@@ -304,6 +312,7 @@ ul.dropdown-menu a:focus {
 	text-transform: uppercase;
 	font-size: 1.125em;
 	margin-right: 5px;
+	padding: 4px;
 }
 
 #unalTop .btn-group .btn .caret {
@@ -317,12 +326,27 @@ ul.dropdown-menu a:focus {
 	border-color: #333;
 }
 
-#unalTop .seal {
+.seal {
 	position: absolute;
-	right: 10px;
-	top: 41px;
+	right: 25px;
+	bottom: 40px;
 	z-index: 2;
 	border-radius: 5%;
+	cursor: pointer;
+}
+
+#user-photo {
+	width: 65px;
+	height: auto;
+}
+
+.seal-info {
+	position: fixed;
+	right: 25px;
+	bottom: 40px;
+	z-index: 2;
+	border-radius: 5%;
+	cursor: pointer;
 }
 #unalTop .seal:hover {
 	cursor: pointer;
@@ -683,16 +707,24 @@ ul.dropdown-menu a:focus {
 	padding: 0;
 }
 
+.site-url a {
+	font-size: 2vw;
+}
+
 .main_menu .site-url,
 #unalTop .navigation .site-url {
-	background: no-repeat 0 0 url(../images/locDot.png);
 	clear: both;
 	float: left;
-	font-size: 1.72em;
+	font-size: 1.2em;
 	height: 17px;
 	line-height: 18px;
 	margin: 12px 10px 10px 250px;
-	padding: 0 0 0 20px;
+	text-decoration: none;
+}
+.main_menu .site-url,
+#unalTop .navigation .site-url a{
+	text-decoration: none;
+	cursor: default;
 }
 
 .main_menu .site-url a,
@@ -995,11 +1027,16 @@ footer .logos a img {
 }
 
 @media screen and (min-width:992px) and (max-width:1199px) {
+
+	.site-url a {
+		font-size: 1.2vw;
+	}
+
 	#unalTop .seal {
 		right: 8px;
 	}
 
-	#unalTop .seal img {
+	#user-photo {
 		height: 50px;
 		width: auto;
 		top: 5px;
@@ -1059,7 +1096,7 @@ footer .logos a img {
 
 	#unalTop .logo img {
 		margin: 12px auto;
-		height: 46px;
+		height: 75px;
 		width: auto;
 	}
 
@@ -1108,9 +1145,13 @@ footer .logos a img {
 		width: 22px;
 	}
 
+	.site-url a {
+		font-size: 1.1vw;
+
+	}
 	#unalTop .navigation .site-url {
 		margin-left: 200px;
-		font-size: 1.4em;
+
 	}
 
 	#unalTop .navigation .mainMenu {
@@ -1130,9 +1171,9 @@ footer .logos a img {
 		right: 5px;
 	}
 
-	#unalTop .seal img {
+	#user-photo {
 		width: 45px;
-		height: 45px;
+		height: auto;
 		margin-top: 5px;
 	}
 
@@ -1228,6 +1269,11 @@ footer .logos a img {
 }
 
 @media screen and (max-width:767px) {
+
+	#unalTop .logo-header-sgc{
+		right: 50px;
+	}
+	
 	.main_menu {
 		display: flex;
 	}
@@ -1299,9 +1345,9 @@ footer .logos a img {
 		right: 60px;
 	}
 
-	#unalTop .seal img {
+	#user-photo {
 		width: 35px;
-		height: 35px;
+		height: auto;
 	}
 
 	#unalTop .firstMenu {
@@ -1463,11 +1509,15 @@ main .breadcrumb-class span {
 }
 
 .hovered {
-	background-color: #666;
-	border-color: #333;
+	background-color: #666 !important;
+	border-color: #333 !important;
 }
 
 body {
 	background-color: #ddd0;
 	font-size: 16px;
 }
+
+ul {
+	list-style-type: none;
+  }

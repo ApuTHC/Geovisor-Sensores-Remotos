@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    <meta name="revisit-after" content="1 hour">
+    <meta name="distribution" content="all">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.5, user-scalable=yes">
+    <meta name="expires" content="1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="all">
+    <meta name="description"
+        content="Este es el Geovisor desarrollado para el Proyecto con el Servicio Geológico Colombiano adelantado por el grupo de investigación GeoHazards de la Universidad Nacional de Colombia Sede Medellín." />
+    <meta name="keywords"
+        content="sensores, remotos, geohazards, universidad nacional, geología, cartografia, geovisor, servicio geologico colombiano" />
+    <meta name="author" content="Daniel Felipe Correa Zapata" />
+
+    <link rel="stylesheet" type="text/css" href="css/fontawesome.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/frontend.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/unal.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-colorpicker.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/leaflet.css" media="all">
+    <link type="text/css" rel="stylesheet" href="css/leaflet-geoman.css" />
+    <link rel="stylesheet" type="text/css" href="css/info-recolectada.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap4.min.css" media="all">
+    <link type="text/css" rel="stylesheet" href="css/firebase-ui-auth.css" />
+    <link type="text/css" rel="stylesheet" href="css/anim-edicion-tablas.css" />
+
+    <script src="js/jquery.js" type="text/javascript"></script>
+    <script src="js/unal.js" type="text/javascript"></script>
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+   
+    
+    <title>Datos recolectados</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="unalTop">
+        <!-- Logo UNAL -->
+        <div class="logo">
+            <a href="https://unal.edu.co">
+                <!--[if (gte IE 9)|!(IE)]><!-->
+                <svg width="93%" height="93%">
+                    <image xlink:href="images/escudoUnal.svg" width="100%" height="100%" class="hidden-print"
+                        alt="Escudo de la Universidad Nacional de Colombia" />
+                </svg>
+
+                <!--<![endif]-->
+                <!--[if lt IE 9]> <img src="images/escudoUnal.png" width="93%" height="auto"
+        class="hidden-print"/> <![endif]-->
+                <img src="images/escudoUnal_black.png" class="d-none d-print-block"
+                    alt="Escudo de la Universidad Nacional de Colombia" />
+            </a>
+        </div>
+        <!-- Logo SGC -->
+        <div class="logo logo-header-sgc">
+            <a href="https://www.sgc.gov.co/">
+                <!--[if (gte IE 9)|!(IE)]><!-->
+                <img src="images/logo_SGC_blanco.png" width="90%" height="auto" class="hidden-print" alt="Logo del Servicio Geológico Colombiano" style="transform: scaleX(-1);">
+            </a>
+        </div>
+
+        <!-- Menú superior -->
+        <div class="firstMenu d-none d-md-block">
+
+        </div>
+
+        <!-- Menú inferior -->
+        <div id="bs-navbar" class="navigation d-none d-md-block">
+            <!-- Título del sitio -->
+            <div class="site-url" id="subdominio">
+                <a href="#">ACTUALIZACIÓN DEL MAPA NACIONAL DE AMENAZA POR MOVIMIENTOS EN MASA 1:25K - BLOQUE 05</a>
+            </div>
+
+            <!-- Main menu -->
+            <div class="navbar-dark mainMenu" id="main_menu_container">
+                <!-- Items menú principal -->
+                <div class="btn-group">
+                    <a href="./index.html" id="btn_geovisor" class="btn btn-default">Geovisor</a>
+                    <a href="#" id="btn_catvir" class="btn btn-default hovered">Información Recolectada</a>
+                    <a href="./acercade.html" id="btn_addmark" class="btn btn-default">Acerca de</a>
+                </div>
+                <div class="btn-group menu_tools">
+                </div>
+            </div>
+        </div>
+
+        <!--Navbar-->
+        <nav class="navbar navbar-light light-blue lighten-4 main_menu">
+            <!-- Navbar brand -->
+            <a class="navbar-brand d-block d-md-none" href="#"></a>
+
+            <!-- Collapse button -->
+            <button class="navbar-toggler d-block d-md-none collapsed" type="button" data-toggle="collapse"
+                data-target="#navbar_content" aria-controls="navbar_content" aria-expanded="false"
+                aria-label="Toggle navigation" id="btn_hamburguer">
+                <!-- <span class="navbar-toggler-icon"></span> -->
+            </button>
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbar_content">
+                <!-- main -->
+                <div id="container_mainmenu_mobil"></div>
+                <!-- Herramientas -->
+                <div class="btn-group d-block d-md-none hidden-print">
+                    <ul data-target="#container_tools_mobil" class="p-0 m-0">
+                        <li class="w-100 mt-3"><a href="./index.html" class="d-block text-decoration-none w-100 text-center text-light">Geovisor</a></li>
+                        <li class="w-100"> <a href="#" class=" d-block text-decoration-none w-100 text-center text-light hovered">Información recolectada</a></li>
+                        <li class="w-100 mb-2"> <a href="./acercade.html" class=" d-block text-decoration-none w-100 text-center text-light">Acerca de</a></li>
+                    </ul>
+                </div>
+                <div class="collapse" id="container_tools_mobil"></div>
+            </div>
+            <!-- Collapsible content -->
+        </nav>
+    </header>
+
+    <div id="info-tablas" class="container-fluid">
+        <!-- User -->
+        <div class="seal-info" data-toggle="modal" data-target="#loginModal">
+            <img id="user-photo-ir" class="hidden-print" alt="Usuario" src="images/user.png" />
+        </div>
+        <div class="row">
+            <ul id="tematicas" role="tablist" class="nav nav-tabs tematicas mt-5 w-100 d-flex justify-content-center align-items-around">
+                <li id="inicio-tab" role="tab" aria-controls="inicio"  class="tema ml-4 nav-item"><a id="boton-inicio" class="nav-link active seleccionado" data-toggle="tab" href="#inicio">Inicio</a></li>
+                <li id="proceso-tab" role="tab" aria-controls="proceso"  class="tema ml-4 nav-item"><a id="boton-procesos" class="nav-link" data-toggle="tab" href="#proceso">Procesos</a></li>
+                <li id="rasgo-tab" role="tab" aria-controls="rasgo"  class="tema ml-4 nav-item"><a id="boton-rasgo" class="nav-link" data-toggle="tab" href="#rasgo">Rasgos</a></li>
+                <li id="geologia-tab" role="tab" aria-controls="geologia"  class="tema ml-4 nav-item"><a id="boton-geologia" class="nav-link" data-toggle="tab" href="#geologia">Geología</a></li>
+                <li id="geomorfo-tab" role="tab" aria-controls="geomorfo"  class="tema ml-4 nav-item"><a id="boton-geomorfo" class="nav-link sin-terminar" data-toggle="tab" href="#geomorfo" style="pointer-events: none; color: rgb(116, 116, 116);">Geomorfología</a></li>
+                <li id="estruc-tab" role="tab" aria-controls="estruc"  class="tema ml-4 nav-item"><a id="boton-estruc" class="nav-link sin-terminar" data-toggle="tab" href="#estruc" style="pointer-events: none; color: rgb(116, 116, 116);">Estructuras</a></li>
+            </ul>
+            <div id="tabla" class="tab-content mt-4 mb-4 w-100">
+                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="inicio-tab" id="inicio">
+                    <div class="inicio w-100">
+                        <div class="w-75 mx-auto text-center">
+                        <h1>Información recolectada</h1>
+                        <h3>Proyecto de Actualización del Mapa Nacional de Amenaza por Movimientos en Masa a Escala 1:25.000 - Bloque 05</h3>
+                        </div>
+                        <hr class="sep-inicio w-50 mx-auto">
+                        <div class="contenedor-logos mx-auto text-center d-flex justify-content-around align-items-center">
+                            <img id="logo-unal" src="images/escudoUnal_black.svg" alt="">
+                            <img id="logo-geohazards" src="images/LOGO_FINAL_V2.png" alt="">
+                            <img id="logo-sgc" src="images/logo_SGC_transp.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="tablaconfig tab-pane fade mx-auto" role="tabpanel" aria-labelledby="proceso-tab" id="proceso">
+                    <div class="envoltura-tabla">
+                        <div class="modal fade" id="modal-procesos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header estilo-modales">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edición registros de Procesos Morfodinámicos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form>
+                                        <div class="modal-body">
+                                            <h5 class="w-100 font-weight-bold mx-auto text-center" id="id-edit-procesos"></h5>
+                                            <input id="id" type="hidden">
+                                            <div class="form-group">                                    
+                                                <label for="id-mov-1">ID Movimiento</label>
+                                                <input id="id-mov-1" type="text" class="form-control" onchange="idParteDinamico()">
+                                            </div>    
+                                            <div class="form-group">
+                                                <label for="encuestador-2">Encuestador</label>
+                                                <input id="encuestador-2" type="text" maxlength="50" class="form-control" disabled="disable">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cod-simma-3">Código SIMMA</label>
+                                                <input id="cod-simma-3" type="number" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="fecha-reporte-4">Fecha Reporte</label>
+                                                <input id="fecha-reporte-4" type="date" class="form-control" >
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="fecha-mov-5">Fecha Movimiento</label>
+                                                <input id="fecha-mov-5" type="date" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="confiabilidad-6">Confiabilidad Fecha</label>
+                                                <select id="confiabilidad-6" class="form-control">
+                                                    <option value="01">01 - Exacta</option>
+                                                    <option value="02">02 - Certeza mes/año</option>
+                                                    <option value="03">03 - Certeza año</option>
+                                                    <option value="04">04 - Confiabilidad baja</option>
+                                                    <option value="05">05 - Incierta</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="fuente-infosec-7">Fuente Información Secundaria</label>
+                                                <textarea id="fuente-infosec-7" maxlength="255" type="text" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="anio-infosec-8">Año fuente</label>
+                                                <input id="anio-infosec-8" maxlength="100" type="text" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="dpto-9">Departamento</label>
+                                                <select id="dpto-9" class="form-control">
+                                                    <option value="CALDAS">CALDAS</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ref-geografica-10">Referencia Geográfica</label>
+                                                <textarea id="ref-geografica-10" maxlength="250" type="text" class="form-control"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vereda-11">Vereda</label>
+                                                <input id="vereda-11" type="text" class="form-control">
+                                            </div>
+                                        
+                                            <div class="form-group">
+                                                <label for="tipo-mm1-13">Tipo de Movimiento en Masa 1</label>
+                                                <select id="tipo-mm1-13" class="form-control" onchange="selectSubtipoMM1();etiquetaDinamica();tipoMMDinamico()">
+                                                    <option value="-">Vacío</option>
+                                                    <option value="01">01 - Deslizamiento</option>
+                                                    <option value="02">02 - Reptación </option>
+                                                    <option value="03">03 - Caida</option>
+                                                    <option value="04">04 - Flujo</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="subtipo-mm1-15">Subtipo de Movimiento en Masa 1</label>
+                                                <select id="subtipo-mm1-15" type="text"  class="form-control" onchange="etiquetaDinamica()">
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Tipo de Movimiento en Masa 2</label>
+                                                <select id="tipo-mm2-14" class="form-control" onchange="selectSubtipoMM2()">
+                                                    <option value="-"> - Vacío - </option>
+                                                    <option value="No Aplica">No Aplica</option>
+                                                    <option value="Deslizamiento">Deslizamiento</option>
+                                                    <option value="Reptación">Reptación </option>
+                                                    <option value="Caída">Caída</option>
+                                                    <option value="Flujo">Flujo</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="subtipo-mm2-16">Subtipo de Movimiento en Masa 2</label>
+                                                <select id="subtipo-mm2-16" class="form-control">
+                                                    <option value="No Aplica">No Aplica</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="profundidad-25">Profundidad</label>
+                                                <select id="profundidad-25" class="form-control" onchange="etiquetaDinamica();tipoMMDinamico()">
+                                                    <option value="Superficia">Superficial</option>
+                                                    <option value="Profundo">Profundo</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="actividad-17">Actividad</label>
+                                                <select id="actividad-17"  class="form-control" onchange="selectActividad();tipoMMDinamico()">
+                                                    <option value="0">0 - No</option>
+                                                    <option value="1">1 - Si</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="estado-activdad-18">Estado actividad</label>
+                                                <select id="estado-activdad-18"  class="form-control">
+                                             
+                                                </select>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label for="estilo-19">Estilo</label>
+                                                <select id="estilo-19" class="form-control">
+                                                    <option value="01">01 - Complejo</option>
+                                                    <option value="02">02 - Compuesto</option>
+                                                    <option value="03">03 - Múltiple</option>
+                                                    <option value="04">04 - Sucesivo</option>
+                                                    <option value="05">05 - Único</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Distribución del Movimiento en Masa</label>
+                                                <select id="distr-mm-20" class="form-control">
+                                                    <option value="01">01 - Retrogresivo</option>
+                                                    <option value="02">02 - Avanzado</option>
+                                                    <option value="03">03 - Ensanchado</option>
+                                                    <option value="04">04 - Confinado</option>
+                                                    <option value="05">05 - Creciente</option>
+                                                    <option value="06">06 - Decreciente</option>
+                                                    <option value="07">07 - Movil</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="parte-mm-21">Parte del Movimiento en Masa</label>
+                                                <select id="parte-mm-21"  class="form-control" onchange="etiquetaDinamica();tipoMMDinamico();idParteDinamico()">
+                                                    <option value="01">01 - Escarpe</option>
+                                                    <option value="02">02 - Tránsito</option>
+                                                    <option value="03">03 - Depósito</option>
+                                                    <option value="04">04 - Cuerpo</option>
+                                                    <option value="05">05 - Indefinido</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id-parte-mm-22">ID de la Parte del Movimiento en Masa</label>
+                                                <input id="id-parte-mm-22" type="text" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Etiqueta</label>
+                                                <input id="etiqueta-23" type="text" class="form-control" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="litologia-24">Litologia</label>
+                                                <textarea id="litologia-24" type="text" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="espesor-26">Espesor</label>
+                                                <input id="espesor-26" type="number" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tamano-bloque-27">Tamaño bloque</label>
+                                                <input id="tamano-bloque-27" type="number" class="form-control">
+                                            </div> 
+                                            <div class="form-group">
+                                                <label for="cobertura-uso-28">Cobertura y Uso del Suelo</label>
+                                                <textarea id="cobertura-uso-28"  maxlength="100" class="form-control"></textarea/>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label for="geomorfologia-29">Geomorfologia</label>
+                                                <textarea id="geomorfologia-29"  maxlength="250" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="importancia-30">Importancia</label>
+                                                <select id="importancia-30" class="form-control">
+                                                    <option value="Alta">Alta</option>
+                                                    <option value="Media">Media</option>
+                                                    <option value="Baja">Baja</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="elementos-exp-31">Elementos expuestos</label>
+                                                <textarea id="elementos-exp-31"  maxlength="100"  class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="danos-causados-32">Daños causados</label>
+                                                <textarea id="danos-causados-32" maxlength="100" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="amen-potencial-33">Amenaza potencial</label>
+                                                <textarea id="amen-potencial-33" type="text" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="verif-campo-34">Verificación en campo</label>
+                                                <select id="verif-campo-34" class="form-control" onchange="tipoMMDinamico()">
+                                                    <option value="0">0 - No</option>
+                                                    <option value="1">1 - Si</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="observaciones-35">Observaciones</label>
+                                                <textarea id="observaciones-35" maxlength="254" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cuenca-36">Cuenca</label>
+                                                <input id="cuenca-36" type="text" maxlength="20" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id-formato-37">Formato de campo</label>
+                                                <input id="id-formato-37" type="text" class="form-control" maxlength="50">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="codigo-mm-38">Codigo y Tipo del Movimiento en Masa</label>
+                                                <select id="codigo-mm-38" class="form-control" onchange="selectMM()">
+                                                    <option value="01.01.01">01.01.01 - Deslizamiento activo verificado (escarpe)</option>
+                                                    <option value="01.01.02">01.01.02 - Deslizamiento activo no verificado (escarpe)</option>
+                                                    <option value="01.01.03">01.01.03 - Deslizamiento activo verificado (cuerpo)</option>
+                                                    <option value="01.01.04">01.01.04 - Deslizamiento activo no verificado (cuerpo)</option>
+                                                    <option value="01.01.05">01.01.05 - Deslizamiento activo verificado</option>
+                                                    <option value="01.01.06">01.01.06 - Deslizamiento activo no verificado</option>
+                                                    <option value="01.01.07">01.01.07 - Deslizamiento inactivo verificado (escarpe)</option>
+                                                    <option value="01.01.08">01.01.08 - Deslizamiento inactivo no verificado (escarpe)</option>
+                                                    <option value="01.01.09">01.01.09 - Deslizamiento inactivo verificado (cuerpo)</option>
+                                                    <option value="01.01.10">01.01.10 - Deslizamiento inactivo no verificado (cuerpo)</option>
+                                                    <option value="01.01.11">01.01.11 - Deslizamiento inactivo verificado</option>
+                                                    <option value="01.01.12">01.01.12 - Deslizamiento inactivo no verificado</option>
+                                                    <option value="01.01.17">01.01.17 - Deslizamiento activo verificada (tránsito)</option>
+                                                    <option value="01.01.18">01.01.18 - Deslizamiento activo no verificada (tránsito)</option>
+                                                    <option value="01.01.19">01.01.19 - Deslizamiento inactivo verificada (tránsito)</option>
+                                                    <option value="01.01.20">01.01.20 - Deslizamiento inactivo no verificada (tránsito)</option>
+                                                    <option value="01.02.01">01.02.01 - Caída activa verificada (escarpe)</option>
+                                                    <option value="01.02.02">01.02.02 - Caída activa no verificada (escarpe)</option>
+                                                    <option value="01.02.03">01.02.03 - Caída activa verificada (cuerpo)</option>
+                                                    <option value="01.02.04">01.02.04 - Caída activa no verificada (cuerpo)</option>
+                                                    <option value="01.02.05">01.02.05 - Caída activa verificada</option>
+                                                    <option value="01.02.06">01.02.06 - Caída activa no verificada</option>
+                                                    <option value="01.02.07">01.02.07 - Caída inactiva verificada (escarpe)</option>
+                                                    <option value="01.02.08">01.02.08 - Caída inactiva no verificada (escarpe)</option>
+                                                    <option value="01.02.09">01.02.09 - Caída inactiva verificada (cuerpo)</option>
+                                                    <option value="01.02.10">01.02.10 - Caída inactiva no verificada (cuerpo)</option>
+                                                    <option value="01.02.11">01.02.11 - Caída inactiva verificada</option>
+                                                    <option value="01.02.12">01.02.12 - Caída inactiva no verificada</option>
+                                                    <option value="01.02.17">01.02.17 - Caída activa verificada (tránsito)</option>
+                                                    <option value="01.02.18">01.02.18 - Caída activa no verificada (tránsito)</option>
+                                                    <option value="01.02.19">01.02.19 - Caída inactiva verificada (tránsito)</option>
+                                                    <option value="01.02.20">01.02.20 - Caída inactiva no verificada (tránsito)</option>
+                                                    <option value="01.03.01">01.03.01 - Volcamiento activo verificado (escarpe)</option>
+                                                    <option value="01.03.02">01.03.02 - Volcamiento activo no verificado (escarpe)</option>
+                                                    <option value="01.03.03">01.03.03 - Volcamiento activo verificado (cuerpo)</option>
+                                                    <option value="01.03.04">01.03.04 - Volcamiento activo no verificado (cuerpo)</option>
+                                                    <option value="01.03.05">01.03.05 - Volcamiento activo verificado</option>
+                                                    <option value="01.03.06">01.03.06 - Volcamiento activo no verificado</option>
+                                                    <option value="01.03.07">01.03.07 - Volcamiento inactivo verificado (escarpe)</option>
+                                                    <option value="01.03.08">01.03.08 - Volcamiento inactivo no verificado (escarpe)</option>
+                                                    <option value="01.03.09">01.03.09 - Volcamiento inactivo verificado (cuerpo)</option>
+                                                    <option value="01.03.10">01.03.10 - Volcamiento inactivo no verificado (cuerpo)</option>
+                                                    <option value="01.03.11">01.03.11 - Volcamiento inactivo verificado</option>
+                                                    <option value="01.03.12">01.03.12 - Volcamiento inactivo no verificado</option>
+                                                    <option value="01.04.01">01.04.01 - Avenida torrencial verificada (zona tránsito)</option>
+                                                    <option value="01.04.02">01.04.02 - Avenida torrencial no verificada (zona tránsito)</option>
+                                                    <option value="01.04.03">01.04.03 - Avenida torrencial verificada (zona depósito)</option>
+                                                    <option value="01.04.04">01.04.04 - Avenida torrencial no verificada (zona depósito)</option>
+                                                    <option value="01.04.05">01.04.05 - Flujo activo verificado (escarpe)</option>
+                                                    <option value="01.04.06">01.04.06 - Flujo activo no verificado (escarpe)</option>
+                                                    <option value="01.04.07">01.04.07 - Flujo activo verificado (cuerpo)</option>
+                                                    <option value="01.04.08">01.04.08 - Flujo activo no verificado (cuerpo)</option>
+                                                    <option value="01.04.09">01.04.09 - Flujo activo verificado</option>
+                                                    <option value="01.04.10">01.04.10 - Flujo activo no verificado</option>
+                                                    <option value="01.04.11">01.04.11 - Flujo inactivo verificado (escarpe)</option>
+                                                    <option value="01.04.12">01.04.12 - Flujo inactivo no verificado (escarpe)</option>
+                                                    <option value="01.04.13">01.04.13 - Flujo inactivo verificado (cuerpo)</option>
+                                                    <option value="01.04.14">01.04.14 - Flujo inactivo no verificado (cuerpo)</option>
+                                                    <option value="01.04.15">01.04.15 - Flujo inactivo verificado </option>
+                                                    <option value="01.04.16">01.04.16 - Flujo inactivo no verificado</option>
+                                                    <option value="01.04.21">01.04.21 - Flujo activo  verificado (tránsito)</option>
+                                                    <option value="01.04.22">01.04.22 - Flujo activo no verificado (tránsito)</option>
+                                                    <option value="01.04.23">01.04.23 - Flujo inactivo verificado (tránsito)</option>
+                                                    <option value="01.04.24">01.04.24 - Flujo inactivo no verificado (tránsito)</option>
+                                                    <option value="01.05.01">01.05.01 - Reptación superficial verificada</option>
+                                                    <option value="01.05.02">01.05.02 - Reptación superficial no verificada</option>
+                                                    <option value="01.05.03">01.05.03 - Reptación profunda verificada</option>
+                                                    <option value="01.05.04">01.05.04 - Reptación profunda no verificada</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tipo-mm-12">Tipo Movimiento en Masa</label>
+                                                <input id="tipo-mm-12" type="text" class="form-control" disabled="disabled">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="mapa-39">Mapa</label>
+                                                <select id="mapa-39" class="form-control">
+                                                    <option value="01">01 - Mapa de inventario de procesos morfodinámicos</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="codigo-mpio-40">Código municipio</label>
+                                                <select id="codigo-mpio-40"  class="form-control" onchange="selectMpio()">
+                                                    <option value="17013">17013 - AGUADAS</option>
+                                                    <option value="17050">17050 - ARANZAZU</option>
+                                                    <option value="17272">17272 - FILADELFIA</option>
+                                                    <option value="17444">17444 - MARQUETALIA</option>
+                                                    <option value="17614">17614 - RIOSUCIO</option>
+                                                    <option value="17777">17777 - SUPÍA</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nombre municipio</label>
+                                                <input id="nombre-mpio-41" type="text" class="form-control" disabled="disabled">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Altitud</label>
+                                                <input id="altitud-42" type="text" maxlength="50" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Ancho</label>
+                                                <input id="ancho-43" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Área M</label>
+                                                <input id="area-m-44" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Dirección</label>
+                                                <input id="direccion-45" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ESTE</label>
+                                                <input id="este-46" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ESTE_CUERP</label>
+                                                <input id="este-cuerp-47" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ESTE_ESC</label>
+                                                <input id="este-esc-48" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>LONGITUD</label>
+                                                <input id="longitud-49" type="text" maxlength="50"  class="form-control" >
+                                            </div>
+                                            <div class="form-group">
+                                                <label>NORTE</label>
+                                                <input id="norte-50" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>NORTE_CUERP</label>
+                                                <input id="norte-cuerp-51" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>NORTE_ESC</label>
+                                                <input id="norte-esc-52" type="text" maxlength="50"  class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Volumen</label>
+                                                <input id="volumen-53" type="text" maxlength="50"  class="form-control">
+                                            </div>                                           
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" tabindex="2">Cancelar</button>
+                                            <button type="submit" value="btnGuardar" class="btn estilo-modales" translate="1">Guardar</button>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Modal de confirmación para eliminar una fila de la base de datos -->
+                        <div class="modal fade" id="eliminar-modal-procesos" tabindex="-1" role="dialog" aria-labelledby="tituloModalConfirmacion" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                  <h5 class="modal-title" id="tituloModalConfirmacion">Confirmación</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <h5 id="confir-eliminar-procesos"></h5>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn font-weight-bold estilo-modales eliminar-final">Eliminar registro</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="figura-modal-proc" tabindex="-1" role="dialog" aria-labelledby="titulo-visualizar-figura-procesos" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                    <h6 class="modal-title font-weight-bold" id="titulo-visualizar-figura-procesos"></h6>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mapa-container">
+                                        <div id="mapa-procesos"></div>
+                                        <select id="mapas_base_procesos" onChange="selectBaseMapIR(mapas_base_procesos)" class="opc-mapabase" style="z-index: 1000;">
+                                            <option value="Google">Google Maps</option>
+                                            <option value="Hillshade">Hillshade World</option>
+                                            <option value="Imagery">Imagery</option>
+                                            <option value="Street">OpenStreet</option>
+                                        </select>
+                                        <button type="button" id="guardar-figura-procesos" class="guardar-layer ocultar-guardar" style="z-index: 1000;">
+                                            <i class="fas fa-save" title="Guardar cambios"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div id="cargando-tabla-procesos">
+                            <div class="contenedor-cargando">
+                                <div class="spinner"></div>
+                                <span class="spinner-msj">Procesando datos...</span>
+                            </div>
+                        </div>
+                        <table id="tabla-procesos" class="table table-bordered table-hover" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                              <tr>
+                                <th class="ver-registro" style="color: white; background-color:#333;">Ver</th>  
+                                <th class="editar-registro" style="color: white; background-color:#333;">Editar</th>
+                                <th> ID </th>
+                                <th> ID Mov.</th>
+                                <th> Encuestador </th>
+                                <th> Cód. SIMMA</th>
+                                <th> Fecha reporte</th>
+                                <th> Fecha Mov. </th>
+                                <th> Confiabilidad </th>
+                                <th> Fuente info. sec. </th>
+                                <th> Año fuente</th>
+                                <th> Departamento </th>
+                                <th> Ref. geográfica </th>
+                                <th> Vereda </th>
+                                <th> Tipo MM.</th>
+                                <th> Tipo MM. 1</th>
+                                <th> Subtipo MM. 1</th>
+                                <th> Tipo MM. 2</th>
+                                <th> Subtipo MM. 2</th>
+                                <th> Profundidad </th>
+                                <th> Actividad </th>
+                                <th> Estado actividad </th>
+                                <th> Estilo </th>
+                                <th> Distr. del MM. </th>
+                                <th> Parte del MM. </th>
+                                <th> Parte ID </th>
+                                <th> Etiqueta </th>
+                                <th> Litología </th>
+                                <th> Espesor </th>
+                                <th> Tamaño de bloque </th>
+                                <th> Cobertura y uso </th>
+                                <th> Geomorfología </th>
+                                <th> Importancia </th>
+                                <th> Elem. expuestos</th>
+                                <th> Daños causados </th>
+                                <th> Amenaza potencial </th>
+                                <th> Verif. campo </th>
+                                <th> Observaciones </th>
+                                <th> Cuenca</th>
+                                <th> ID formato</th>
+                                <th> Cód. MM</th>
+                                <th> Mapa </th>
+                                <th> Cód. Mpio.</th>
+                                <th> Nombre Mpio.</th>
+                                <th> ALTITUD</th>
+                                <th> ANCHO</th>
+                                <th> AREA_M</th>
+                                <th> DIRECCION</th>
+                                <th> ESTE</th>
+                                <th> ESTE_CUERP</th>
+                                <th> ESTE_ESC</th>
+                                <th> LONGITUD</th>
+                                <th> NORTE</th>
+                                <th> NORTE_CUER</th>
+                                <th> NORTE_ESC</th>                                                            
+                                <th> VOLUMEN</th>
+                                <th class="eliminar-registro" style="color: white; background-color:#333;"> Eliminar</th>
+                              </tr>
+                              <tr>
+                                <th></th>  
+                                <th><button id="limpiar-campos-procesos" title="Limpiar campos"><i class="fas fa-redo-alt"></i></button></th>
+                                <th class="text-search"> ID </th>
+                                <th class="text-search"> ID Mov.</th>
+                                <th class="select-search"> Encuestador </th>
+                                <th class="text-search"> Cód. SIMMA</th>
+                                <th class="text-search"> Fecha reporte</th>
+                                <th class="text-search"> Fecha Mov. </th>
+                                <th class="select-search"> Confiabilidad </th>
+                                <th class="text-search"> Fuente info. sec. </th>
+                                <th class="text-search"> Año fuente</th>
+                                <th class="select-search"> Departamento </th>
+                                <th class="text-search"> Ref. geográfica </th>
+                                <th class="select-search"> Vereda </th>
+                                <th class="select-search"> Tipo MM.</th>
+                                <th class="select-search"> Tipo MM. 1</th>
+                                <th class="select-search"> Subtipo MM. 1</th>
+                                <th class="select-search"> Tipo MM. 2</th>
+                                <th class="select-search"> Subtipo MM. 2</th>
+                                <th class="select-search"> Profundidad </th>
+                                <th class="select-search"> Actividad </th>
+                                <th class="select-search"> Estado actividad </th>
+                                <th class="select-search"> Estilo </th>
+                                <th class="select-search"> Distr. del MM. </th>
+                                <th class="select-search"> Parte del MM. </th>
+                                <th class="text-search"> Parte ID </th>
+                                <th class="text-search"> Etiqueta </th>
+                                <th class="text-search"> Litología </th>
+                                <th class="text-search"> Espesor </th>
+                                <th class="text-search"> Tamaño de bloque </th>
+                                <th class="text-search"> Cobertura y uso </th>
+                                <th class="text-search"> Geomorfología </th>
+                                <th class="select-search"> Importancia </th>
+                                <th class="text-search"> Elem. expuestos</th>
+                                <th class="text-search"> Daños causados </th>
+                                <th class="text-search"> Amenaza potencial </th>
+                                <th class="select-search"> Verif. campo </th>
+                                <th class="text-search"> Observaciones </th>
+                                <th class="text-search"> Cuenca</th>
+                                <th></th>
+                                <th class="text-search"> Cód. MM</th>
+                                <th class="text-search"> Mapa </th>
+                                <th></th>
+                                <th class="select-search"> Nombre Mpio.</th>
+                                <th class="text-search"> ALTITUD</th>
+                                <th class="text-search"> ANCHO</th>
+                                <th class="text-search"> AREA_M</th>
+                                <th class="text-search"> DIRECCION</th>
+                                <th class="text-search"> ESTE</th>
+                                <th class="text-search"> ESTE_CUERP</th>
+                                <th class="text-search"> ESTE_ESC</th>
+                                <th class="text-search"> LONGITUD</th>
+                                <th class="text-search"> NORTE</th>
+                                <th class="text-search"> NORTE_CUER</th>
+                                <th class="text-search"> NORTE_ESC</th>                                                            
+                                <th class="text-search"> VOLUMEN</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                    </div>
+                    <div id="complementos" class="mt-3">
+                        <div class="modal fade" id="id-repetido-modal" tabindex="-1" role="dialog" aria-labelledby="id-repetidos-procesos" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                    <h6 class="modal-title font-weight-bold" id="id-repetidos-procesos">Registros con ID repetidos</h6>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 id="total-repetidos"></h6>
+                                    <table id="tabla-id-repetido" class="table table-bordered table-hover" cellpadding="0" cellspacing="0" width="100%">
+                                        <thead>
+                                            <th>ID Parte</th>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>  
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Complementos
+                            </button>
+                            <div class="dropdown-menu estilo-modales">
+                              <a id="id-repetidos" class="dropdown-item" href="#" data-target="#id-repetido-modal">Mostrar registros con ID repetido</a>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+                <div class="tablaconfig tab-pane fade mx-auto" role="tabpanel" aria-labelledby="geologia-tab" id="geologia">
+                    <div class="envoltura-tabla">
+                        <div class="modal fade" id="modal-geologia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header estilo-modales">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edición registros Unidades Geológicas Superficiales</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form>
+                                        <div class="modal-body">
+                                            <h5 class="w-100 font-weight-bold mx-auto text-center" id="id-edit-geologia"></h5>
+                                            <input id="id-geo" type="hidden"> 
+                                            <div class="form-group">                                    
+                                                <label for="g-nombre-mpio-1">Nombre municipio</label>
+                                                <select id="g-nombre-mpio-1" class="form-control">
+                                                    <option value="AGUADAS">17013 - AGUADAS</option>
+                                                    <option value="ARANZAZU">17050 - ARANZAZU</option>
+                                                    <option value="FILADELFIA">17272 - FILADELFIA</option>
+                                                    <option value="MARQUETALIA">17444 - MARQUETALIA</option>
+                                                    <option value="RIOSUCIO">17614 - RIOSUCIO</option>
+                                                    <option value="SUPÍA">17777 - SUPÍA</option>
+                                                </select>
+                                            </div>    
+                                            <div class="form-group">
+                                                <label for="g-vereda-2">Vereda</label>
+                                                <input id="g-vereda-2" maxlength="30" type="text" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-nombre-ugs-3">Nombre Unidad Geologica Supercial (UGS)</label>
+                                                <textarea id="g-nombre-ugs-3" maxlength="200" type="text" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="g-roca-suelo-4">Roca o suelo</label>
+                                            <select id="g-roca-suelo-4"  class="form-control" onchange="TipoUGS_tablas()">
+                                                <option value="Roca">Roca</option>
+                                                <option value="Suelo">Suelo</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-tipo-5"> Tipo material</label>
+                                                <select id="g-tipo-5"  class="form-control" onchange="TipoUGS1_tablas()">
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-codigo-ugs-12">Codigo y tipo UGS</label>
+                                                <select id="g-codigo-ugs-12" class="form-control">
+                                                
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Forma de la cima</label>
+                                                <select id="g-forma-cima-6" type="text" class="form-control">
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="relieve-relativo-7">Relieve relativo</label>
+                                                <select id="relieve-relativo-7" class="form-control">
+                                                    <option value="Muy bajo">Muy bajo</option>
+                                                    <option value="Bajo">Bajo</option>
+                                                    <option value="Moderado">Moderado</option>
+                                                    <option value="Alto">Alto</option>
+                                                    <option value="Muy alto">Muy alto</option>
+                                                    <option value="Extermadamente alto">Extermadamente alto</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-inclin-ladera-8">Inclinacion de la ladera</label>
+                                                <select id="g-inclin-ladera-8"  class="form-control">
+                                                    <option value="Plana >5">Plana >5</option>
+                                                    <option value="Inclinada 6 - 10">Inclinada 6 - 10</option>
+                                                    <option value="Muy inclinada 11 - 15">Muy inclinada 11 - 15</option>
+                                                    <option value="Abrupta 16 - 20">Abrupta 16 - 20</option>
+                                                    <option value="Muy abrupta 21 - 30">Muy abrupta 21 - 30</option>
+                                                    <option value="Escarpada 31 - 45">Escarpada 31 - 45</option>
+                                                    <option value="Muy escarpada >45">Muy escarpada >45</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-forma-ladera-10">Forma de la ladera</label>
+                                                <select id="g-forma-ladera-10" class="form-control">
+                                                   
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-calidad-13" >Calidad de la roca</label>
+                                                <select id="g-calidad-13"  class="form-control">
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea id="g-observaciones-11" maxlength="2000" class="form-control"></textarea/>
+                                            </div>
+                
+                                            
+                                            <div class="form-group">
+                                                <label>Descripcion</label>
+                                                <textarea id="g-descripcion-14" class="form-control"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Mapa</label>
+                                                <select id="g-mapa-15" class="form-control">
+                                                    <option value="02">02 - Mapa de unidades geológicas superficiales</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-propietario-16">Propietario</label>
+                                                <input id="g-propietario-16" type="text" class="form-control">
+                                            </div>                                          
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" tabindex="2">Cancelar</button>
+                                            <button type="submit" value="btnGuardar" class="btn estilo-modales" translate="1">Guardar</button>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                        </div>
+                         <!-- Modal de confirmacion de eliminacion de registro -->
+                        <div class="modal fade" id="eliminar-modal-geologia" tabindex="-1" role="dialog" aria-labelledby="tituloModalConfirmacion" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                  <h5 class="modal-title" id="tituloModalConfirmacion">Confirmación</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <h5 id="confir-eliminar-geologia"></h5>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn font-weight-bold estilo-modales eliminar-final">Eliminar registro</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <!-- Modal que muestra la figura de un registro de geologia -->
+                        <div class="modal fade" id="figura-modal-geo" tabindex="-1" role="dialog" aria-labelledby="titulo-visualizar-figura-geologia" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                    <h6 class="modal-title font-weight-bold" id="titulo-visualizar-figura-geologia"></h6>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mapa-container">
+                                        <div id="mapa-geologia"></div>
+                                        <select id="mapas_base_geologia" onChange="selectBaseMapIR(mapas_base_geologia)" class="opc-mapabase" style="z-index: 1000;">
+                                            <option value="Google">Google Maps</option>
+                                            <option value="Hillshade">Hillshade World</option>
+                                            <option value="Imagery">Imagery</option>
+                                            <option value="Street">OpenStreet</option>
+                                        </select>
+                                        <button type="button" id="guardar-figura-geologia" class="guardar-layer ocultar-guardar" style="z-index: 1000;">
+                                            <i class="fas fa-save" title="Guardar cambios"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div id="cargando-tabla-geologia">
+                            <div class="contenedor-cargando">
+                                <div class="spinner"></div>
+                                <span class="spinner-msj">Procesando datos...</span>
+                            </div>
+                        </div>
+                        <table id="tabla-geologia" class="table table-bordered table-hover" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                              <tr>
+                                <th class="ver-registro" style="color: white; background-color:#333;">Ver</th>  
+                                <th class="editar-registro" style="color: white; background-color:#333;">Editar</th>
+                                <th> ID </th>
+                                <th>Nombre Mpio.</th>
+                                <th>Vereda</th>
+                                <th>Nombre UGS</th>
+                                <th>Roca o Suelo</th>
+                                <th>Tipo</th>
+                                <th>Forma cima</th>
+                                <th>Relieve relativo</th>
+                                <th>Inclinación ladera</th>
+                                <th>Forma ladera</th>
+                                <th>Observaciones</th>
+                                <th>Código UGS</th>
+                                <th>Calidad roca</th>
+                                <th>Descripción</th>
+                                <th>Mapa</th>
+                                <th>Propietario</th>
+                                <th class="eliminar-registro" style="color: white; background-color:#333;"> Eliminar</th>
+                              </tr>
+                              <tr>
+                                <th></th>  
+                                <th><button id="limpiar-campos-geologia" title="Limpiar campos"><i class="fas fa-redo-alt"></i></button></th>
+                                <th class="text-search"> ID </th>
+                                <th class="select-search">Nombre Mpio.</th>
+                                <th class="select-search">Vereda</th>
+                                <th class="select-search">Nombre UGS</th>
+                                <th class="select-search">Roca o Suelo</th>
+                                <th class="select-search">Tipo</th>
+                                <th class="select-search">Forma cima</th>
+                                <th class="select-search">Relieve relativo</th>
+                                <th class="select-search">Inclinación ladera</th>
+                                <th class="select-search">Forma ladera</th>
+                                <th class="text-search">Observaciones</th>
+                                <th class="select-search">Código UGS</th>
+                                <th class="select-search">Calidad roca</th>
+                                <th class="text-search">Descripción</th>
+                                <th></th>
+                                <th class="select-search">Propietario</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                <div class="tablaconfig tab-pane fade mx-auto" role="tabpanel" aria-labelledby="geomorfo-tab" id="geomorfo">
+                    <div class="envoltura-tabla">
+                        <table id="tabla-geomorfo" class="table table-bordered" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                              <tr>
+                                <th> ID</th>
+                                <th>Nombre SGMF</th>
+                                <th>Código SGMF</th>
+                                <th>Ambiente</th>
+                                <th>Descripción</th>
+                                <th>Mapa</th>
+                                <th>Código Mpio.</th>
+                                <th>Nombre Mpio.</th>
+                              </tr>
+                            </thead>
+                            <tbody >
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                <div class="tablaconfig tab-pane fade mx-auto" role="tabpanel" aria-labelledby="estruc-tab" id="estruc">
+                    <div class="envoltura-tabla">
+                        
+                        <table id="tabla-estruc" class="table" cellpadding="0" cellspacing="0" width="100%">
+                        <thead>
+                           <tr>
+                                <th> ESTR_ID</th>
+                                <th>Ambiente</th>
+                                <th>COD_MUN</th>
+                                <th>Cod_UGS</th>
+                                <th>Descripcion</th>
+                                <th>Mapa</th>
+                                <th>NOM_MUN</th>
+                                <th>Nom_SGMF</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div class="tablaconfig tab-pane fade mx-auto" role="tabpanel" aria-labelledby="rasgo-tab" id="rasgo">
+                    <div class="envoltura-tabla">
+                        <div class="modal fade" id="modal-rasgos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header estilo-modales">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edición rasgos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form>
+                                        <div class="modal-body">
+                                            <h5 class="w-100 font-weight-bold mx-auto text-center" id="id-edit-rasgos"></h5>
+                                            <input id="rasgo-id" type="hidden">
+                                            <div class="form-group">
+                                                <label for="ras-propietario-1">Propietario</label>
+                                                <input type="text" class="form-control" id="ras-propietario-1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-cod-rasgo-2">Codigo y Nombre del Rasgo</label>
+                                                <select class="form-control" id="ras-cod-rasgo-2" maxlength="50" onchange="selectRasgos()">
+                                                    <option value="02.01.01">02.01.01 - Lomo lineal o lomo de falla</option>
+                                                    <option value="02.01.02">02.01.02 - Silleta de falla</option>
+                                                    <option value="02.01.03">02.01.03 - Valle en copa de vino</option>
+                                                    <option value="02.01.04">02.01.04 - Trinchera de falla</option>
+                                                    <option value="02.01.05">02.01.05 - Basculamiento</option>
+                                                    <option value="02.01.06">02.01.06 - Laguna de falla</option>
+                                                    <option value="02.01.07">02.01.07 - Berma de falla</option>
+                                                    <option value="02.01.08">02.01.08 - Cambio de pendiente</option>
+                                                    <option value="02.01.09">02.01.09 - Drenaje obturado</option>
+                                                    <option value="02.01.10">02.01.10 - Drenaje controlado</option>
+                                                    <option value="02.01.11">02.01.11 - Drenaje deflectado</option>
+                                                    <option value="02.01.12">02.01.12 - Escarpe de falla</option>
+                                                    <option value="02.01.13">02.01.13 - Faceta trapezoidal</option>
+                                                    <option value="02.01.14">02.01.14 - Faceta triangular</option>
+                                                    <option value="02.01.15">02.01.15 - Gancho de flexión</option>
+                                                    <option value="02.01.16">02.01.16 - Hombrera de falla</option>
+                                                    <option value="02.01.17">02.01.17 - Silleta dibujada</option>
+                                                    <option value="02.01.18">02.01.18 - Drenaje desviado</option>
+                                                    <option value="02.01.19">02.01.19 - Gancho de falla</option>
+                                                    <option value="02.01.20">02.01.20 - Cuchilla lineal</option>
+                                                    <option value="02.02.01">02.02.01 - Camino de ganado</option>
+                                                    <option value="02.02.02">02.02.02 - Cicatriz o corona de MM reciente</option>
+                                                    <option value="02.02.03">02.02.03 - Cicatriz o corona de MM antiguo</option>
+                                                    <option value="02.02.04">02.02.04 - Drenaje torrencial</option>
+                                                    <option value="02.02.05">02.02.05 - Escarpe</option>
+                                                    <option value="02.02.06">02.02.06 - Erosión en cárcava (dirección)</option>
+                                                    <option value="02.02.07">02.02.07 - Erosión en cárcava (contorno)</option>
+                                                    <option value="02.02.08">02.02.08 - Erosión en surco</option>
+                                                    <option value="02.02.09">02.02.09 - Escarpe secundario de MM</option>
+                                                    <option value="02.02.10">02.02.10 - Escarpe de caída</option>
+                                                    <option value="02.02.11">02.02.11 - Faceta de erosión</option>
+                                                    <option value="02.02.12">02.02.12 - Grietas de tensión</option>
+                                                    <option value="02.02.13">02.02.13 - Grietas (longitudinales, transversales o radiales)</option>
+                                                    <option value="02.02.14">02.02.14 - Hondonada</option>
+                                                    <option value="02.02.15">02.02.15 - Lóbulo de solifluxión</option>
+                                                    <option value="02.02.16">02.02.16 - Erosión remontante</option>
+                                                    <option value="02.04.01">02.04.01 - Erosión lateral</option>
+                                                    <option value="02.04.02">02.04.02 - Escarpe de terraza</option>
+                                                    <option value="02.04.03">02.04.03 - Meandro abandonado</option>
+                                                    <option value="02.04.04">02.04.04 - Punto de quiebre</option>
+                                                    <option value="02.04.05">02.04.05 - Estrechamiento de drenaje</option>
+                                                    <option value="02.04.06">02.04.06 - Dirección de avance por desborde</option>
+                                                    <option value="02.04.07">02.04.07 - Dirección de flujo</option>
+                                                    <option value="02.09.01">02.09.01 - Cantera activa</option>
+                                                    <option value="02.09.02">02.09.02 - Cantera inactiva</option>
+                                                    <option value="02.09.03">02.09.03 - Corte de talud</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-nombre-3">Nombre Rasgo</label>
+                                                <input class="form-control" type="text" disabled="disabled" id="ras-nombre-3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-descrip-4">Descripción</label>
+                                                <textarea class="form-control" maxlength="255" id="ras-descrip-4"></textarea/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-tipo-5">Tipo</label>
+                                                <select class="form-control" id="ras-tipo-5">
+                                                    <option value="01">01 - Estructural</option>
+                                                    <option value="02">02 - Geomorfológico</option>
+                                                    <option value="03">03 - Geomorfológico-Estructural</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-ambiente-6">Ambiente</label>
+                                                <select class="form-control" id="ras-ambiente-6">
+                                                    <option value="02.01">02.01 - Estructural</option>
+                                                    <option value="02.02">02.02 - Denudacional</option>
+                                                    <option value="02.03">02.03 - Volcánico</option>
+                                                    <option value="02.04">02.04 - Fluvial</option>
+                                                    <option value="02.05">02.05 - Glacial</option>
+                                                    <option value="02.06">02.06 - Marino</option>
+                                                    <option value="02.07">02.07 - Eólico</option>
+                                                    <option value="02.08">02.08 - Kárstico</option>
+                                                    <option value="02.09">02.09 - Antrópico</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-visible-7">Visible 25K</label>
+                                                <select class="form-control" id="ras-visible-7">
+                                                    <option value="1">SI</option>
+                                                    <option value="0">NO</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-mapa-8">Mapa</label>
+                                                <select class="form-control" id="ras-mapa-8">
+                                                    <option value="02"> 02 - Mapa de subunidades geomorfológicas </option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-cod-mpio-9">Código y Nombre del Municipio</label>
+                                                <select class="form-control" id="ras-cod-mpio-9" onchange="selectMpioRasgos()">
+                                                    <option value="17013"> 17013 - AGUADAS </option>
+                                                    <option value="17050"> 17050 - ARANZAZU </option>
+                                                    <option value="17272"> 17272 - FILADELFIA </option>
+                                                    <option value="17444"> 17444 - MARQUETALIA </option>
+                                                    <option value="17614"> 17614 - RIOSUCIO </option>
+                                                    <option value="17777"> 17777 - SUPÍA </option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ras-nombre-mpio-10">Nombre municipio</label>
+                                                <input type="text" id="ras-nombre-mpio-10" class="form-control" disabled="disabled">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" tabindex="2">Cancelar</button>
+                                                <button type="submit" value="btnGuardar" class="btn estilo-modales" translate="1">Guardar</button>
+                                            </div>
+                                        </div>
+                                        
+                                       
+                                    </form>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Modal de confirmacion de eliminacion de registro -->
+                        <div class="modal fade" id="eliminar-modal-rasgos" tabindex="-1" role="dialog" aria-labelledby="tituloModalConfirmacion" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                  <h5 class="modal-title font-weight-bold" id="tituloModalConfirmacion">Confirmación</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <h5 id="confir-eliminar-rasgos"></h5>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn font-weight-bold estilo-modales eliminar-final">Eliminar registro</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <!-- Modal para mostrar la figura de un registro de rasgos -->
+                        <div class="modal fade" id="figura-modal-ras" tabindex="-1" role="dialog" aria-labelledby="titulo-visualizar-figura-rasgos" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header estilo-modales">
+                                    <h6 class="modal-title font-weight-bold" id="titulo-visualizar-figura-rasgos"></h6>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mapa-container">
+                                        <div id="mapa-rasgos"></div>
+                                        <select id="mapas_base_rasgos" onChange="selectBaseMapIR(mapas_base_rasgos)" class="opc-mapabase" style="z-index: 1000;">
+                                            <option value="Google">Google Maps</option>
+                                            <option value="Hillshade">Hillshade World</option>
+                                            <option value="Imagery">Imagery</option>
+                                            <option value="Street">OpenStreet</option>
+                                        </select>
+                                        <button type="button"  id="guardar-figura-rasgos" class="guardar-layer ocultar-guardar" style="z-index: 1000;">
+                                            <i class="fas fa-save" title="Guardar cambios"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div id="cargando-tabla-rasgos">
+                            <div class="contenedor-cargando">
+                                <div class="spinner"></div>
+                                <span class="spinner-msj">Procesando datos...</span>
+                            </div>
+                        </div>
+                        <table id= "tabla-rasgos" class="table table-bordered table-hover" cellpadding="0" cellspacing="0" width="100%">
+                            <thead>
+                              <tr>
+                                <th class="ver-registro" style="color: white; background-color:#333;">Ver</th>  
+                                <th class="editar-registro" style="color: white; background-color:#333;">Editar</th>
+                                <th>ID</th>
+                                <th>Propietario</th>
+                                <th>Nombre rasgo</th>
+                                <th>Código rasgo</th>
+                                <th>Descripción</th>
+                                <th>Tipo rasgo</th>
+                                <th>Ambiente</th>
+                                <th>Visible en 25K</th>
+                                <th>Mapa</th>
+                                <th>Código Mpio.</th>
+                                <th>Nombre Mpio.</th>
+                                <th class="eliminar-registro" style="color: white; background-color:#333;"> Eliminar</th>
+                              </tr>
+                              <tr>
+                                <th></th>  
+                                <th><button id="limpiar-campos-rasgos" title="Limpiar campos"><i class="fas fa-redo-alt"></i></button></th>
+                                <th class="text-search">ID</th>
+                                <th class="select-search">Propietario</th>
+                                <th class="select-search">Código rasgo</th>
+                                <th class="select-search">Nombre rasgo</th>
+                                <th class="text-search">Descripción</th>
+                                <th class="select-search">Tipo rasgo</th>
+                                <th class="select-search">Ambiente</th>
+                                <th class="select-search">Visible en 25K</th>
+                                <th class="select-search">Mapa</th>
+                                <th></th>
+                                <th class="select-search">Nombre Mpio.</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                    </div>
+                    
+                </div>
+            </div>
+            <div id="logos-foot" class="toggle-logos w-100 mb-3">
+                <hr>
+                <div class="logos-container mt-4 mx-auto my-auto text-center d-flex justify-content-around align-items-center">
+                    <img loading="lazy" id="logo-unal-foot" src="images/escudoUnal_black.svg" alt="">
+                    <img loading="lazy" id="logo-geohazards-foot" src="images/LOGO_FINAL_V2.png" alt="">
+                    <img loading="lazy" id="logo-sgc-foot" src="images/logo_SGC_transp.png" alt="">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="firebaseui-auth-container"></div>
+                    <div class="d-none" id="modal-perfil-container">
+                        <img src="#" alt="Foto Perfil" id="foto-perfil">
+                        <h3 id="nombre-perfil">Nombre</h3>
+                        <h4 id="correo-perfil">Correo</h4>
+                        <h4 id="semestre-perfil">Proyecto</h4>
+                        <h4 id="nivel-perfil">Nivel</h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="logout" data-dismiss="modal">Cerrar Sesión</button>
+                    <button type="button" class="btn btn-secondary" id="cancel" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Leaflet -->
+    <script src="js/leaflet.js"></script>
+    <!-- ESRI Leaflet -->
+    <script src="js/esri-leaflet.js"></script>
+    <script src="js/esri-leaflet-vector.js"></script>
+    <!-- Leaflet geoman -->
+    <script src="js/leaflet-geoman.min.js"></script>
+    <!-- Scripts Firebase -->
+    <script src="js/firebase-app-compat.js"></script>
+    <script src="js/firebase-database-compat.js"></script>
+    <script src="js/firebase-storage-compat.js"></script>
+    <script src="js/firebase-auth-compat.js"></script>
+    <script src="js/firebase-ui-auth.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZ4l1moqCWT6w_1I47Q7jov6ZcJciW-7E",
+            authDomain: "visor-proyecto-sgc01.firebaseapp.com",
+            projectId: "visor-proyecto-sgc01",
+            storageBucket: "visor-proyecto-sgc01.appspot.com",
+            messagingSenderId: "439721075291",
+            appId: "1:439721075291:web:4158b30ea9bc81740d557e"
+            
+        };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+    </script>    
+    <script src="js/server.js"></script>
+    <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="js/anim-edicion-tablas.js"></script>
+    <script src="js/anim-info-recolectada.js" type="text/javascript" ></script>
+    <script src="js/render-tabular-info.js" type="text/javascript"></script>
+    
+</body>
+</html>

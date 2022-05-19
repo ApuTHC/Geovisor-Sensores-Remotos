@@ -1,0 +1,586 @@
+#tabla{
+    overflow-x: auto;
+}
+
+
+div#rasgo, div#estruc, div#geomorfo, div#geologia, div#proceso  {
+    width: 97%;
+}
+
+#tabla table thead th {
+    background-color: #cecccc;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#tabla table tbody tr td{
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+div.envoltura-tabla{
+    width: 100%;
+}
+
+
+/* Estilos para el menú de las temáticas  */
+
+#tematicas .seleccionado{
+    background-color: #f9aa32;
+}
+
+#tematicas>li>a{
+    font-size: 21px;
+    color: black;
+    font-weight: bold;
+}
+
+#tematicas>li>a:hover{
+    background-color: #f9aa32
+}
+
+.btnEditar{
+    background-color: transparent;
+}
+
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: rgba(249, 170, 52, 0.5) !important;
+  }
+
+
+
+.table-hover tbody tr:hover td .btnEditar{
+
+    background-color: #333;
+
+}
+
+.table-hover tbody tr:hover td .btnEliminar{
+
+    background-color: #333;
+
+}
+
+.table-hover tbody tr:hover td .btnFigura{
+
+    background-color: #333;
+
+}
+
+
+/* Estilos modal formulario */
+
+.estilo-modales{
+    background-color: #f9aa32;
+    color: #333;
+    font-size: 1.1rem;
+
+}
+
+
+/* Pestaña inicio */
+
+.contenedor-logos{
+    margin-top: 30px;
+    width: 75%;
+    animation: fadeIn 1.4s;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+#logo-unal {
+    width: 290px;
+    height: auto;
+
+}
+
+ #logo-sgc {
+    width: 280px;
+    height: auto;
+
+}
+
+#logo-geohazards {
+    width: 129px;
+    height: auto;
+}
+
+/* Estilos logos al pie de las tablas */
+
+#logo-unal-foot {
+    width: 200px;
+    height: auto;
+
+}
+
+ #logo-sgc-foot {
+    width: 180px;
+    height: auto;
+
+}
+
+#logo-geohazards-foot {
+    width: 90px;
+    height: auto;
+}
+
+/* Cambiar estilos de los botones de paginacion de una tabla */
+
+li.paginate_button.previous a.page-link {
+    color : #ffff;
+    background-color: #333;
+
+}
+
+li.paginate_button.next a.page-link {
+    color : #ffff;
+    background-color: #333;
+
+}
+
+li.paginate_button.previous.disabled a.page-link {
+    color : gray;
+    background-color: white;
+}
+
+li.paginate_button.next.disabled a.page-link {
+    color : gray;
+    background-color: white;
+}
+
+li.paginate_button.previous a.page-link:hover {
+   
+    background-color: rgba(51, 51, 51, 0.85);
+}
+
+li.paginate_button.next a.page-link:hover {
+    
+    background-color: rgba(51, 51, 51, 0.85);
+}
+
+li.paginate_button a.page-link {
+    color: #333;
+    box-shadow: none;
+    font-weight: bold;
+}
+
+li.paginate_button.active a.page-link {
+   color : #333;
+   background-color: #f9aa32;
+   border: 1px solid #333;
+   box-shadow: none;
+}
+
+/* Estilizar caja de filtro y longitud de los registros */
+
+div.dataTables_filter, div.dataTables_length  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Estilos para el modal que contiene el mapa */
+
+.mapa-container{
+    width: 100%;
+    height: 500px;
+
+}
+
+#mapa-procesos, #mapa-geologia, #mapa-rasgos{
+    width: 100%;
+    height: 100%;
+}
+
+/* Ocultar logos en la pestaña de inicio */
+div.toggle-logos{
+    display: none;
+}
+
+div.logos-container {
+    width: 85%;
+}
+
+/* Estilizando los modales que contienen los mapas para visualizar cada figura */
+
+
+div.mapa-container{
+    position: relative;
+
+}
+
+div.mapa-container #mapa-procesos{
+    position: absolute;
+}
+
+div.mapa-container .opc-mapabase{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background: #333;
+    color: #f9aa32;
+    border-color: #f9aa32;
+
+}
+
+button.ocultar-guardar{
+    display: none;
+}
+
+div.mapa-container button.guardar-layer{
+    position: absolute;
+    left: 10px;
+    top: 60px;
+    font-size: 24px;
+    color: #333;
+    background-color: #f9aa32;
+    border: 1px solid #333;
+    text-align: center;
+    border-radius: 5px;
+}
+
+button.guardar-layer{
+    animation: tilt-shaking 0.5s  0.4s;
+  }
+
+@keyframes tilt-shaking {
+    0% { transform: rotate(0deg); }
+    15% { transform: rotate(10deg); }
+    40% { transform: rotate(0deg); }
+    60% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Quitando las flechas de ordenar a las columnas que tienen acciones */
+/* 
+.dataTable > thead > tr > th[class*="ver-registro"]:before, 
+.dataTable > thead > tr > th[class*="ver-registro"]:after{
+    content: "";
+}
+
+
+.dataTable > thead > tr > th[class*="editar-registro"]:before, 
+.dataTable > thead > tr > th[class*="editar-registro"]:after{
+    content: "";
+}
+
+
+.dataTable > thead > tr > th[class*="eliminar-registro"]:before, 
+.dataTable > thead > tr > th[class*="eliminar-registro"]:after{
+    content: "";
+} */
+
+/* Estilos icono de carga de las tablas */
+
+#cargando-tabla-procesos, #cargando-tabla-geologia, #cargando-tabla-rasgos{
+    position: relative;
+    width: 100%;
+    height: 200px;
+}
+
+div.spinner-msj{
+    margin: auto;
+}
+
+div.contenedor-cargando{
+    position: absolute;
+    top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+ 
+}
+
+div.spinner{
+    width: 60px;
+    height: 60px;
+    margin: auto;
+    border: 7px solid transparent;
+    border-radius: 50%;
+    border-top-color: #f9aa32;
+    animation: spin 1s infinite;
+}
+
+@keyframes spin {
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+/* Oscureciendo los bordes de las celdas de la tabla */
+table.table-bordered{
+    border:1px solid rgb(199, 196, 196);
+  }
+table.table-bordered > thead > tr > th{
+    border:1px solid rgb(199, 196, 196);
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid rgb(199, 196, 196);
+}
+
+/* Estilos del modal login */
+
+
+img#user-photo-ir {
+  width: 65px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 4px 6px 6px #2c2c2c;
+}
+
+#loginModal #foto-perfil {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+#loginModal .modal-content {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#loginModal #modal-perfil-container {
+  text-align: center;
+}
+
+#loginModal .modal-header {
+  background: #666;
+  color: white;
+  border: none;
+}
+
+#loginModal .close {
+  color: white;
+}
+
+#loginModal .close:hover {
+  color: white;
+}
+
+#loginModal .modal-body {
+  background: url(../images/navigationBack.png);
+  color: white;
+}
+
+#loginModal .modal-footer {
+  background: #666;
+  padding: 8px;
+  border: none;
+}
+
+
+@media screen and (max-width:575px){
+
+    #logo-unal {
+        width: 100px;
+        height: auto;
+
+    }
+
+    #logo-sgc {
+        width: 90px;
+        height: auto;
+
+    }
+
+    #logo-geohazards {
+        width: 40px;
+        height: auto;
+    }
+
+    /* Estilos logos al pie de las tablas */
+
+    #logo-unal-foot {
+        width: 100px;
+        height: auto;
+
+    }
+
+    #logo-sgc-foot {
+        width: 90px;
+        height: auto;
+
+    }
+
+    #logo-geohazards-foot {
+        width: 40px;
+        height: auto;
+    }
+
+    img#user-photo-ir {
+        width: 35px;
+        height: auto;
+    }
+
+}
+
+@media screen and (min-width:576px) and (max-width: 767px){
+
+    #logo-unal {
+        width: 130px;
+        height: auto;
+
+    }
+
+    #logo-sgc {
+        width: 120px;
+        height: auto;
+
+    }
+
+    #logo-geohazards {
+        width: 50px;
+        height: auto;
+    }
+
+    /* Estilos logos al pie de las tablas */
+
+    #logo-unal-foot {
+        width: 130px;
+        height: auto;
+
+    }
+
+    #logo-sgc-foot {
+        width: 120px;
+        height: auto;
+
+    }
+
+    #logo-geohazards-foot {
+        width: 50px;
+        height: auto;
+    }
+
+    img#user-photo-ir {
+		width: 35px;
+		height: auto;
+	}
+
+    
+}
+
+@media screen and (min-width:768px) and (max-width: 991px){
+
+    #logo-unal {
+        width: 160px;
+        height: auto;
+
+    }
+
+    #logo-sgc {
+        width: 150px;
+        height: auto;
+
+    }
+
+    #logo-geohazards {
+        width: 61px;
+        height: auto;
+    }
+
+    /* Estilos logos al pie de las tablas */
+
+    #logo-unal-foot {
+        width: 160px;
+        height: auto;
+
+    }
+
+    #logo-sgc-foot {
+        width: 150px;
+        height: auto;
+
+    }
+
+    #logo-geohazards-foot {
+        width: 64px;
+        height: auto;
+    }
+
+    img#user-photo-ir {
+		width: 45px;
+		height: auto;
+		margin-top: 5px;
+	}
+    
+}
+
+@media screen and (min-width:992px) and (max-width: 1199px){
+
+    
+    #logo-unal {
+        width: 250px;
+        height: auto;
+
+    }
+
+     #logo-sgc {
+        width: 240px;
+        height: auto;
+
+    }
+
+    #logo-geohazards {
+        width: 115px;
+        height: auto;
+    }
+
+    img#user-photo-ir {
+		height: 50px;
+		width: auto;
+		top: 5px;
+		position: relative;
+	}
+    
+}
+
+::placeholder { 
+    opacity: 0.7; 
+    font-style: italic;
+  }
+
+/* Estilos del dropdown para mostrar id repetidos */
+#id-repetidos:hover{
+    background-color: #fccf8d;
+}
+
+
+/* Estilos boton de limpieza de busquedad tablas */
+
+#limpiar-campos-geologia, #limpiar-campos-rasgos, #limpiar-campos-procesos{
+    font-size: 1.2rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+}
+
+
+/* Estilos inpus de busqueda de las columnas */
+
+input.buscador-header{
+    border: 1px solid rgb(88, 88, 88);
+
+}
+
+select.buscador-header{
+    border: 1px solid rgb(88, 88, 88);;
+    height: 27px;
+    
+}
+
+input.buscador-header:focus{
+    outline: none;
+    box-shadow: 2px 2px 2px;
+
+}
+
+select.buscador-header:focus{
+    outline: none;
+    box-shadow: 2px 2px 2px;
+
+}

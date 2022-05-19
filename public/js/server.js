@@ -1,7 +1,3 @@
-var marcadores;
-var semestres;
-var auxMark = false;
-var auxSemester = false
 // FirebaseUI config.
 var uiConfig = {
     signInSuccessUrl: 'index.html',
@@ -48,33 +44,16 @@ var uiConfig = {
             providerData: providerData
           }, null, '  ');
           
-          database.ref('users/user_' + uid).set({
-            name : displayName,
-            email : email,
-            photo : photoURL,
-            uid : uid
-          });
-
-          database.ref().child("marcadores").get().then((snapshot) => {
-            if (snapshot.exists()) {
-              marcadores = snapshot.val();
-              auxMark = true;
-              dbReady();
-            } else {
-              console.log("No data available");
-            }
-          }).catch((error) => {
-            console.error(error);
-          });
-
-          database.ref().child("semestres").get().then((snapshot) => {
-            if (snapshot.exists()) {
-              semestres = snapshot.val();
-              auxSemester = true;
-              dbReady();
-            } else {
-              console.log("No data available");
-            }
+          database.ref().child("users/user_"+uid).get().then((snapshot) => {
+            if (!snapshot.exists()) {
+              database.ref('users/user_' + uid).set({
+                name : displayName,
+                email : email,
+                photo : photoURL,
+                uid : uid,
+                semestre : "2022-1"
+              });
+            } 
           }).catch((error) => {
             console.error(error);
           });
@@ -105,12 +84,6 @@ var uiConfig = {
   window.addEventListener('load', function() {
     initApp()
   });
-
-  function dbReady() {
-    if (auxSemester && auxMark) {
-      CargarInfo();
-    }
-  }
 
   $("#logout").click(function (e) { 
     firebase.auth().signOut();

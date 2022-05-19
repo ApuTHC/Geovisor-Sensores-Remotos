@@ -1,0 +1,56 @@
+.modal[data-drag="draged"] .modal-dialog{
+	margin: 0;
+	position: absolute;
+}
+
+.modal-header{
+	cursor: default;
+}
+
+.alert-container{
+	position: fixed;
+}
+.alert-container .alert{
+	box-shadow: 0 5px 5px rgba(0,0,0,0.5);
+    font-size: 1rem;
+    color: #333;
+    font-weight: 200;
+}
+
+#alert-container-topleft{
+	top: 10px;
+	left: 10px;
+}
+
+#alert-container-topcenter{
+	top: 35px;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+#alert-container-topright{
+	top: 30px;
+	right: 20px;
+}
+
+#alert-container-bottomleft{
+	bottom: 10px;
+	left: 10px;
+}
+
+#alert-container-bottomcenter{
+	bottom: 10px;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+#alert-container-bottomright{
+	bottom: 10px;
+	right: 10px;
+}
+
+#alert-container-center{
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
