@@ -1,3 +1,22 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyCPbSbHvmy2nfxTEoQB-vCvH1VN9iUqt_0",
+  authDomain: "sremotos-unal.firebaseapp.com",
+  databaseURL: "https://sremotos-unal-default-rtdb.firebaseio.com",
+  projectId: "sremotos-unal",
+  storageBucket: "sremotos-unal.appspot.com",
+  messagingSenderId: "190050714963",
+  appId: "1:190050714963:web:11001fcc1016cb2b224da6",
+  measurementId: "G-E1BLLX6JE9"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+var storage = firebase.storage();
+var storageRef = storage.ref();
+
+var uid;
+
 // FirebaseUI config.
 var uiConfig = {
     signInSuccessUrl: 'index.html',
@@ -28,7 +47,7 @@ var uiConfig = {
         var email = user.email;
         var emailVerified = user.emailVerified;
         var photoURL = user.photoURL;
-        var uid = user.uid;
+        uid = user.uid;
         var phoneNumber = user.phoneNumber;
         var providerData = user.providerData;
         user.getIdToken().then(function(accessToken) {

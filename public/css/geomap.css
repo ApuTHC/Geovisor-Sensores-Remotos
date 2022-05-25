@@ -775,12 +775,12 @@ button.pegar-form:focus{
 }
 
  
-#lista_capas_descargar .btn-descargar{
+.btn-descargar{
   margin-bottom: 20px;
   margin-top: 10px;
   margin-right: 10px;
   background-color: #f9ae00;
-  color: #333;
+  color: #333 !important;
   padding: 5px;
   font-size: 1rem;
   cursor: pointer;
@@ -788,16 +788,27 @@ button.pegar-form:focus{
   
 }
 
-#lista_capas_descargar .btn-descargar:hover{
+.btn-descargar:hover{
   background-color: #9a700c;
   color: #333;
 }
 
-#lista_capas_descargar .btn-descargar i{
+.btn-descargar i{
   margin-left: 5px;
   margin-right: 2px;
 }
 
+#rocas{
+  border-bottom: 1px solid #f9ae00;
+}
+
+.foto_rok{
+  border-bottom: 1px solid #f9ae00;
+}
+
+.form_foto{
+  padding-bottom: 2rem;
+}
 
 
 div.contenedor-cargando-descarga{
@@ -818,6 +829,8 @@ div.contenedor-cargando-descarga div.spinner-descarga{
   animation: spin 1s infinite;
 
 }
+
+
 
 @keyframes spin {
   100%{

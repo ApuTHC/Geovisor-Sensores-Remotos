@@ -21,6 +21,11 @@ var sidebarLeft = false;
 var cutMode = false;
 var marcadores;
 var semestres;
+var countRocks;
+var fileAflor = null;
+var fileZoom = null;
+var urlRockCheck = [];
+var fileRock =[];
 // Opciones del Spin
 var spinOpts = {
   lines: 10, // The number of lines to draw
@@ -42,6 +47,13 @@ var spinOpts = {
   className: 'spinner', // The CSS class to assign to the spinner
   //position: 'absolute', // Element positioning
 };
+//Iconos Marcadores
+var IconDefault = L.icon({
+  iconUrl: 'css/images/marker-icon.png'
+});
+var IconSelect = L.icon({
+  iconUrl: 'css/images/marker-resaltado.png'
+});
 
 // ---------> Datos
 // Declaración del objeto 'CapaDatos'
@@ -1128,30 +1140,103 @@ function ResaltarFeat(newFeat, notNew) {
     });
   }
 }
+function ResaltarMark(newFeat, notNew) {
+
+  if (!editMode) {
+    if(layergeojsonAnterior==newFeat){
+  
+    }else if(layergeojsonAnterior == null){
+      layergeojsonAnterior = newFeat
+      notNewAnterior = notNew;
+    }else if (notNewAnterior){
+      layergeojsonAnterior.pm.disable();
+      layergeojsonAnterior.setIcon(IconDefault);
+    }else{
+      layergeojsonAnterior.pm.disable();
+      layergeojsonAnterior.setIcon(IconDefault);
+    }
+    layergeojsonAnterior = newFeat;
+    notNewAnterior = notNew;
+    newFeat.setIcon(IconSelect);
+    newFeat.pm.enable({
+      allowSelfIntersection: true,
+    });
+    newFeat.on('pm:edit', (e) => {
+      layergeojson = e.layer.toGeoJSON();
+    });
+  }
+}
 // Función que se llama al seleccionar una figura nueva
 function EditNewMark() {
 
-  idLayer = "nuevo";
-  claseLayer = "nuevo";
+  idLayer = "nuevo_mark";
+  claseLayer = "nuevo_mark";
   layerEdit = this;
   layergeojson = this.toGeoJSON();
-  //ResaltarFeat(this, false);
+  ResaltarMark(this, false);
+  countRocks=0;
+  fileAflor = null;
+  fileZoom = null;
+  fileRock = [];
+  urlRockCheck = [];
 
-    $("#UGS_PROPIETARIO").val();
-    $("#UGS_NAME").val('');
-    $("#UGS_CALIDAD").val('No Aplica');
-    $("#UGS_DESCRI").val('');
-    $("#UGS_MAPA").val('02');
-    $("#UGS_VEREDA").val('');
-    $("#UGS_tipo").val('Suelo');
-    $("#UGS_tiporocasuelo").val('Residual');
-    $("#UGS_relieverela").val('Muy bajo');
-    $("#UGS_inclinacionladera").val('Plana >5');
-    $("#UGS_observa").val('');
+  $("#listSidebarLeft").empty();
+  $("#listSidebarLeft").append(
+    '<li class="title" id="titulo">Formulario Afloramiento</li>'+
+    '<li class="sub-title">Nombre de la Estación<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="nombre" class="form-control"rows="1"> </textarea><i>("Estación ##, Grupo # Semestre 202#-#")</i></li>'+
+    '<li class="sub-title">Código de la Estación<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="codigo" class="form-control"rows="1"> </textarea><i>("E##-G#-2#-#")</i></li>'+
+    '<li class="sub-title">Ubicación del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descrigene" class="form-control"rows="2"> </textarea><i>(Descripción lo mas detallada posible de la ubicación del afloramiento)</i></li>'+
+    '<li class="sub-title">Foto del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="form_foto"><input type="file" id="fotoAflor" onchange="handleFilesAflor(this.files, id)"><br><i>(Formato .jpg)</i></li>'+
+    '<li class="sub-title">Descripción del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descriaflor" class="form-control"rows="2"> </textarea><i>(Descripción detallada del afloramiento)</i></li>'+
+    '<li class="sub-title">Estructuras del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descriestruct" class="form-control"rows="2"> </textarea><i>(Descripción detallada de las estructuras presentes en el afloramiento)</i></li>'+
+    '<li class="sub-title">Foto de Detalle Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="form_foto"><input type="file" id="fotoAflor" onchange="handleFilesZoom(this.files, id)"><br><i>(Formato .jpg)</i></li>'+
+    '<li class="sub-title">Meteorización del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descrimeteor" class="form-control"rows="2"> </textarea><i>(Descripción detallada de la meteorización presente en el afloramiento)</i></li>'+
+    '<li class="sub-title">Descripción Litologías</li>'+
+    '<a class="btn-descargar" id="btnGuardarMark" onclick="AñadirRok()" type="button"><i class="fas fa-plus"></i> Añadir Litología </a>'+
+    '<div id="rocas"></div>'+
+    '<li class="sub-title">Equipo de Trabajo<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"> </textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
+    '<li class="sub-title">Plancha<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="plancha" class="form-control"rows="1"> </textarea><i>(Escriba el nombre de la plancha donde se encuentre la estación)</i></li>'+
+    '<li class="sub-title">Fecha</li>'+
+    '<li class="sb-text"> <input type="date" class="form-control" id="fecha"></li>'+
 
-    if (!sidebarLeft) {
-      Recarga();
-    }
+    '<a class="btn-descargar" id="markSave" onclick="GuardarMark()" type="button"><i class="fas fa-save"></i> Guardar </a>'
+    );
+    $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
+
+  if (!sidebarLeft) {
+    Recarga();
+  }
+}
+function AñadirRok() {
+  $("#rocas").append(
+    '<li class="sub-title">Descripción Litología '+ (countRocks+1) +'<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="des_rok_'+ countRocks +'" class="form-control"rows="2"> </textarea><i>(Descripción detallada de la roca)</i></li>'+
+    '<li class="sub-title">Foto Litología '+ (countRocks+1) +'<sup style="color : red">*</sup></li>'+
+    '<li class="foto_rok form_foto" ><input type="file" id="foto_rok_'+ countRocks +'" onchange="handleFilesRok(this.files, id)"><br><i>(Formato .jpg)</i></li>'
+  );
+  countRocks++;
+}
+
+function handleFilesAflor(files, id){
+  fileAflor = files[0];
+}
+function handleFilesZoom(files, id){
+  fileZoom = files[0];
+}
+function handleFilesRok(files, id){
+  var auxRocks = parseInt(id.split('_')[2]);
+  fileRock[auxRocks] = files[0];
+  urlRockCheck[auxRocks] = false;
 }
 
 function EditNewMap() {
@@ -1185,7 +1270,7 @@ function EditExistMark(e) {
   layergeojson = e.layer.toGeoJSON();
   idLayer = layergeojson.properties.id;
   claseLayer = layergeojson.properties.clase;
-  //ResaltarFeat(e.layer, true);
+  ResaltarMark(e.layer, true);
   console.log(e.layer.toGeoJSON());
 
   $("#listSidebarLeft").empty();
@@ -1270,61 +1355,145 @@ function ArreglarMayus(text) {
   })
   return output;
 }
+// Función para validar que los campos estén diligenciados
+function validar(id) {
+  valor = $('#'+id).val().split(' ').join('');
+  if (valor.length == 0) {
+    return false;
+  }else{
+    return true;
+  }
+}
+
 
 // Función para guardar una figura en la clase geomorfo
-$("#morfoSave").click(function (e) { 
-  e.preventDefault();
- 
-  if (layergeojson !== null && (claseLayer == 'nuevo' || claseLayer == 'morfo')) {
-    
-    claseLayer = 'morfo';
-
-    L.extend(layergeojson.properties, {
-      Forma: forma,
-      Propietario: uname     
-    });
-    database.ref().child("features/morfo/count").get().then((snapshot) => {
-      if (snapshot.exists()) {
-        if (idLayer == "nuevo") {
-          var aux = snapshot.val();
-          var newCount = parseInt(aux["count"])+1;
-          database.ref('features/morfo/count').set({
-            count : newCount
-          });
-          database.ref('features/morfo/feature_'+aux["count"]).set({
-            id: aux["count"],
-            uid: uid,
-            activo: true,
-            layergeojson : layergeojson
-          });
-          alert("Guardado con Éxito");
-        }else{
-          delete layergeojson.layer;
-          delete layergeojson.properties._feature;
-          database.ref('features/morfo/feature_' + idLayer).set({
-            id: idLayer,
-            uid: uid,
-            activo: true,
-            layergeojson : layergeojson
-          });
-          alert("Guardado con Éxito");
-        }
-
-      } else {
-        console.log("No data available");
+function GuardarMark(){
+  if (layergeojson !== null && claseLayer == 'nuevo_mark') {
+    var isCorrect = true;
+    var idsMark = ["descrigene", "descriaflor", "descriestruct", "descrimeteor", "recolectors", "codigo", "nombre", "plancha"];
+    for (let i = 0; i < idsMark.length; i++) {
+      if(!validar(idsMark[i])){
+        isCorrect = false;
       }
-    }).catch((error) => {
-      console.error(error);
-    });
-    
+    }
+    if (fileAflor == null || fileZoom == null) {
+      isCorrect = false;
+    }
+    for (let j = 0; j < countRocks; j++) {
+      var idAux = 'des_rok_'+j
+      if (!validar(idAux)) {
+        isCorrect = false;
+      }
+      if (fileRock[j] == null || fileRock[j] == undefined || fileRock[j] == '') {
+        isCorrect = false;
+      }
+    }
+
+    if (isCorrect) {
+      map.spin(true, spinOpts);
+      for (let i = 0; i < countRocks; i++) {
+        layergeojson.properties['des_rok_'+i] = $("#des_rok_"+i).val()     
+      }
+      
+      var cod = $("#codigo").val();
+      var grupo = $("#codigo").val().split('-')[1];
+
+      L.extend(layergeojson.properties, {
+        des_pos: $("#descrigene").val(),
+        des_aflor: $("#descriaflor").val(),
+        des_struct: $("#descriestruct").val(),
+        des_meteor: $("#descrimeteor").val(),
+        grupo: $("#recolectors").val(),
+        fecha: $("#fecha").val(),
+        nombre: $("#nombre").val(),
+        cod: cod,
+        plancha: $("#plancha").val(),
+        rocas: countRocks  
+      });
+
+      database.ref().child("semestres").get().then((snapshot) => {
+        if (snapshot.exists()) {
+          semestres = snapshot.val();
+          var semestreCount = semestres['count'] - 1;
+          storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflor.jpg').put(fileAflor).then((snapshot) => {
+            storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflor.jpg').getDownloadURL().then(function(url) {
+              layergeojson.properties['aflor'] = url;
+              storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflorzoom.jpg').put(fileAflor).then((snapshot) => {
+                storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflorzoom.jpg').getDownloadURL().then(function(url) {
+                  layergeojson.properties['aflorzoom'] = url;
+                  if (fileRock.length>0) {
+                    for (let i = 0; i < fileRock.length; i++) {
+                      storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/roca_'+i+'.jpg').put(fileRock[i]).then((snapshot) => {
+                        storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/roca_'+i+'.jpg').getDownloadURL().then(function(url) {
+                          layergeojson.properties['roca_'+i] = url;
+                          console.log(url);
+                          urlRockCheck[i] = true;
+                          ImgSaved();
+                        }).catch(function(error) {
+                          console.log(error);
+                        });
+                      }); 
+                    }
+                  }else{
+                    GuardarenBD();
+                  }
+                }).catch(function(error) {
+                  console.log(error);
+                });
+              });
+            }).catch(function(error) {
+              console.log(error);
+            });
+          });
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }else{
+      alert("Por Favor Llene Todos los Campos y Agregue Todas las Fotos");
+    }
   }
   if (layergeojson == null) {
-    alert("Seleccione la figura a guardar")
+    alert("Seleccione el Marcador a Guardar");
   }
-  if (claseLayer != 'morfo' && claseLayer != 'nuevo') {
-    alert("La figura no pertenece a esta clase")
+  if (claseLayer != 'nuevo_mark') {
+    alert("Esto No es un Marcador");
   }
-});
+}
+
+function ImgSaved() {
+  if (!urlRockCheck.includes(false)) {
+    GuardarenBD();
+  }
+}
+
+function GuardarenBD() {
+  var semestreCount = semestres['count'] - 1;
+  database.ref().child("marcadores/"+semestres['semestre_'+semestreCount]+"/count").get().then((snapshot) => {
+    if (snapshot.exists()) {
+      var aux = snapshot.val();
+      var newCount = parseInt(aux["count"])+1;
+      database.ref("marcadores/"+semestres['semestre_'+semestreCount]+"/count").set({
+        count : newCount
+      });
+      database.ref("marcadores/"+semestres['semestre_'+semestreCount]+"/mark_"+aux["count"]).set({
+        id: aux["count"],
+        uid: uid,
+        activo: true,
+        layergeojson : layergeojson
+      });
+      map.spin(false);
+      alert("Guardado con Éxito");                                                
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
 // Función para eliminar una figura
 $("#deleteFeat").click(function (e) { 
   e.preventDefault();
@@ -1358,7 +1527,7 @@ $("#deleteFeat").click(function (e) {
 // ................................Funciones para Cargar y Cambiar el Mapa Base 
 function setBasemap(basemap) {
 
-
+  var basemap = basemaps.value;
   if (mapaBase) {
     map.removeLayer(mapaBase);
   }
