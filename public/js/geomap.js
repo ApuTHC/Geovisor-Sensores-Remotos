@@ -77,6 +77,21 @@ function CargarDatos() {
       for (let i = 0; i < semestres["count"]; i++) {
         capasDatos.push(new CapaDatos(null,[],null,0,'marcadores', semestres["semestre_"+i] ,'#2ecc71'));
       }
+      for (let i = 1; i < semestres["count"]; i++) {
+        var indexMap = capasDatos.push(new CapaDatos(null,[],null,0,'geomapas', semestres["semestre_"+i] ,'#2ecc71'));
+        indexMap = indexMap - 1;
+        $("#lista_capas_descargar").empty();
+        $("#lista_capas_descargar").append(
+              '<h3>Mapa Geológico</h3>' +
+              '<label for="tipo_descarga_'+ indexMap +'">Descargar en Formato: </label>' +
+              '<select id="tipo_descarga_'+ indexMap +'" class="form-control select-mpios">' +
+                  '<option value="shp">Shapefile</option>' +
+                  '<option value="geojson">GeoJSON</option>' +
+              '</select>'+
+              '<a class="btn-descargar" id="clase_descarga_'+ indexMap +'" onclick="CargarDatosDescarga(id, this)" type="button" >  <i class="fas fa-layer-group"></i>   Cargar la Capa </a>'+
+              '<a class="btn-descargar" id="clasea_descarga_'+ indexMap +'" onclick="DescargarDatos(id, this)" type="button" >  <i class="fas fa-file-download"></i>   Descargar </a>'
+        );
+      }
       for (let i = 0; i < capasDatos.length; i++) {
         if(capasDatos[i].clase === 'marcadores'){
           $("#list_mark").append(
@@ -101,25 +116,7 @@ function CargarDatos() {
           );
           $("#forma_"+i).prop("checked", false);
         }
-        
-        $("#lista_capas_descargar").append(
-          '<li>'+
-            '<button type="button" class="collapsible coll_descarga">'+ capasDatos[i].name +'</button>'+
-            '<div class="content descarga_datos cont_descargas mx-auto" id="descarga_datos_'+ i +'">'+
-              '<label for="mpio_descarga_'+ i +'">Descargar: </label>' +
-              '<select id="mpio_descarga_'+ i +'" class="form-control select-mpios">' +
-                  '<option value="ALL">Todos</option>' +
-              '</select>'+
-              '<label for="tipo_descarga_'+ i +'">Descargar en Formato: </label>' +
-              '<select id="tipo_descarga_'+ i +'" class="form-control select-mpios">' +
-                  '<option value="shp">Shapefile</option>' +
-                  '<option value="geojson">GeoJSON</option>' +
-              '</select>'+
-              '<a class="btn-descargar" id="clase_descarga_'+ i +'" onclick="CargarDatosDescarga(id, this)" type="button" >  <i class="fas fa-layer-group"></i>   Cargar la Capa </a>'+
-              '<a class="btn-descargar" id="clasea_descarga_'+ i +'" onclick="DescargarDatos(id, this)" type="button" >  <i class="fas fa-file-download"></i>   Descargar </a>'+
-            '</div>'+
-          '</li>'
-        );
+      
         
       }
   
@@ -166,10 +163,10 @@ function CargarCapaDatos() {
             L.geoJson(this.database['mark_'+i]['layergeojson'],{
                 onEachFeature: function (feature, layer) {
                   feature.layer = layer;
-                  layer.bindPopup(popupFiguras);
+                  layer.bindPopup(popupMarks);
                 }
               })
-              .bindPopup(popupFiguras)
+              .bindPopup(popupMarks)
               .addTo(this.capa)
               .addTo(allData)
               .on('click', function(e) {
@@ -180,7 +177,47 @@ function CargarCapaDatos() {
         console.log(this.figuras);
         console.log(this.capa.toGeoJSON());
         console.log(allData.toGeoJSON());
-        searchCtrl.indexFeatures(allData.toGeoJSON(), ['cod','id','nombre', 'grupo', 'semestre', 'clase']);
+        searchCtrl.indexFeatures(allData.toGeoJSON(), ['cod','id','nombre', 'grupo', 'clase',"nombreUGS", "codigoUGS", "tipoUGS", "recolectors", "plancha"]);
+        map.spin(false);
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+  if (this.clase === 'geomapas') {
+    database.ref().child(this.clase+'/'+this.name).get().then((snapshot) => {
+      if (snapshot.exists()) {
+        this.database = snapshot.val();
+        console.log(snapshot.val());
+        for (let i = 0; i < this.database.count.count; i++) {
+          if (this.database['feat_'+i]?.activo) {
+            this.figuras.push(this.database['feat_'+i]['layergeojson']);
+            L.extend(this.database['feat_'+i]['layergeojson'].properties, {
+              id: this.database["feat_"+i]["id"],
+              clase: this.clase,
+              semestre: this.name
+            });
+            // console.log(i);
+            L.geoJson(this.database['feat_'+i]['layergeojson'],{
+                onEachFeature: function (feature, layer) {
+                  feature.layer = layer;
+                  layer.bindPopup(popupMaps);
+                }
+              })
+              .bindPopup(popupMaps)
+              .addTo(this.capa)
+              .addTo(allData)
+              .on('click', function(e) {
+                EditExistMap(e);
+              });           
+          }
+        }
+        console.log(this.figuras);
+        console.log(this.capa.toGeoJSON());
+        console.log(allData.toGeoJSON());
+        searchCtrl.indexFeatures(allData.toGeoJSON(), ['cod','id','nombre', 'grupo', 'clase',"nombreUGS", "codigoUGS", "tipoUGS", "recolectors", "plancha"]);
         map.spin(false);
       } else {
         console.log("No data available");
@@ -210,9 +247,8 @@ function DescargarDatos(id, obj) {
   if (capasDatos[num_descarga].active == 0) {
     alert("Por favor active la capa que desea descargar.")
   } else{
-    let filtroDescarga = $("#mpio_descarga_" + num_descarga).val();
     let filtrotipo = $("#tipo_descarga_" + num_descarga).val();
-    DescargarDatosJSON(capasDatos[num_descarga].database, capasDatos[num_descarga].clase, filtroDescarga, filtrotipo )
+    DescargarDatosJSON(capasDatos[num_descarga].database, capasDatos[num_descarga].clase, filtrotipo )
   }
 }
 // Función para descargar un archivo
@@ -224,89 +260,39 @@ function saveToFile(content, filename) {
   }), file);
 }
 //Función que filtra los datos según el mpio seleccionado y construye el geojson
-function DescargarDatosJSON(baseDatos, clase, filtro, filtrotipo){
+function DescargarDatosJSON(baseDatos, clase, filtrotipo){
   let capas = L.layerGroup();
   let copiaDatos = {...baseDatos}
 
-  if(clase === "procesos"){
-    for (let j = 0; j < copiaDatos["count"]["count"]; j++) {
-      if (copiaDatos["feature_"+j]["activo"] && copiaDatos["feature_"+j]["layergeojson"]["geometry"]["type"] !== 'LineString') {
-        var temp = copiaDatos["feature_"+j]["layergeojson"];
-        if(filtro == "ALL"){
-          L.geoJson(temp).addTo(capas);
-        }
-        else if(copiaDatos['feature_'+j]["layergeojson"]["properties"].COD_MUN == filtro){
-          L.geoJson(temp).addTo(capas);
-        }
-      }
+  for (let j = 0; j < copiaDatos["count"]["count"]; j++) {
+    if (copiaDatos["feat_"+j]?.activo) {
+      let temp = copiaDatos["feat_"+j]["layergeojson"];
+      L.geoJson(temp).addTo(capas);
+      // temp["geometry"]["coordinates"].pop();
     }
   }
-  else if(clase === "rasgos"){
-    for (let j = 0; j < copiaDatos["count"]["count"]; j++) {
-      if (copiaDatos["feature_"+j]["activo"] && copiaDatos["feature_"+j]["layergeojson"]["geometry"]["type"] !== 'Polygon') {
-        let temp = copiaDatos["feature_"+j]["layergeojson"];
-        if(filtro == "ALL"){
-          temp["properties"].COD_MUN = temp["properties"].COD_MUN+"";
-          L.geoJson(temp).addTo(capas);
-        }else if(copiaDatos['feature_'+j]["layergeojson"]["properties"].COD_MUN == filtro){
-          temp["properties"].COD_MUN = temp["properties"].COD_MUN+"";
-          L.geoJson(temp).addTo(capas);
-        }
-      }
-    }
-  }
-  else if(clase === "geologia"){
-
-    for (let j = 0; j < copiaDatos["count"]["count"]; j++) {
-      if (copiaDatos["feature_"+j]?.activo) {
-        let temp = copiaDatos["feature_"+j]["layergeojson"];
-        if(filtro == "ALL"){
-          temp["geometry"]["coordinates"][0].pop();
-          L.geoJson(temp).addTo(capas);
-        }else if(copiaDatos['feature_'+j]["layergeojson"]["properties"].COD_MUN == filtro){
-          temp["geometry"]["coordinates"][0].pop();
-          L.geoJson(temp).addTo(capas);
-        }
-      }
-    }
-  }
-
-
+  
   let archivoFinal = capas.toGeoJSON();
   //Eliminar el campos no deseados
   for(let k= 0; k < archivoFinal.features.length; k++ ){
     delete archivoFinal["features"][k].layer;
     delete archivoFinal["features"][k]["properties"]["_feature"];
-    delete archivoFinal["features"][k]["properties"]["id"];
-    delete archivoFinal["features"][k]["properties"]["clase"];
-    delete archivoFinal["features"][k]["properties"]["nombreclase"];
-
-    delete archivoFinal["features"][k]["properties"].codigo;
-    delete archivoFinal["features"][k]["properties"].descripcion;
-    delete archivoFinal["features"][k]["properties"].fecha;
-    delete archivoFinal["features"][k]["properties"].nombre;
-    delete archivoFinal["features"][k]["properties"].propietario;
-    delete archivoFinal["features"][k]["properties"].zona;
-
-    delete archivoFinal["features"][k]["properties"].CR;
-    delete archivoFinal["features"][k]["properties"].Visible_25;
-    delete archivoFinal["features"][k]["properties"].Propietari;
 
     archivoFinal["features"][k]["id"] = k;
   }
 
   if (filtrotipo === 'shp') {
     var options = {
-      folder: 'Capa_'+ clase+ "_" + cod_mpios[filtro] + '_' +dateFormat(new Date(),'Y-m-d'),
+      folder: 'Capa_'+ clase+ "_" +dateFormat(new Date(),'Y-m-d'),
       types: {
-          point: clase+ "_" + cod_mpios[filtro] + '_' +dateFormat(new Date(),'Y-m-d'),
-          polygon: clase+ "_" + cod_mpios[filtro] + '_' +dateFormat(new Date(),'Y-m-d'),
-          polyline: clase+ "_" + cod_mpios[filtro] + '_' +dateFormat(new Date(),'Y-m-d')
+          point: clase+ "_" +dateFormat(new Date(),'Y-m-d'),
+          polygon: clase+ "_" +dateFormat(new Date(),'Y-m-d'),
+          polyline: clase+ "_" +dateFormat(new Date(),'Y-m-d')
       }
   }
     shpwrite.download(archivoFinal, options);
   } else {
-    saveToFile(archivoFinal, 'Capa_'+ clase + "_" + cod_mpios[filtro] + '_'+dateFormat(new Date(),'Y-m-d')); //Generar el archivo descargable
+    saveToFile(archivoFinal, 'Capa_'+ clase + "_" +dateFormat(new Date(),'Y-m-d')); //Generar el archivo descargable
   }
 
   capas = null;
@@ -327,11 +313,23 @@ const getCircularReplacer = () => {
   };
 };
 // Función que define los popup de las figuras según su clase
-function popupFiguras(layer) {
+function popupMarks(layer) {
   if (!editMode) {
     if (layer.feature.properties.clase == 'marcadores') {
       return L.Util.template('<p><strong>Estación</strong>: {cod}.<br>'+ 
                               '<strong>Nombre</strong>: {nombre}.<br>'+
+                              '<strong>Grupo</strong>: {grupo}.<br>'+
+                              '<strong>ID en la Base de Datos</strong>: {id}.<br>', layer.feature.properties);
+    }
+  }
+}
+function popupMaps(layer) {
+  if (!editMode) {
+    if (layer.feature.properties.clase == 'geomapas') {
+      return L.Util.template('<p><strong>Codigo</strong>: {Cod_UGS}.<br>'+ 
+                              '<strong>Nombre</strong>: {Nom_UGS}.<br>'+
+                              '<strong>Tipo</strong>: {Tipo_UGS}.<br>'+
+                              '<strong>Descripción</strong>: {Descri_UGS}.<br>'+
                               '<strong>Grupo</strong>: {grupo}.<br>'+
                               '<strong>ID en la Base de Datos</strong>: {id}.<br>', layer.feature.properties);
     }
@@ -463,7 +461,7 @@ function CargarInsumos() {
         } 
   
         insumosGenerales[i].capa = new L.geoJson(insumosGenerales[i].url, {
-          snapIgnore: true,
+          // snapIgnore: true,
           onEachFeature: function(feature, layer) {
             if (feature.properties) {
               layer.bindPopup(Object.keys(feature.properties).map(function(k) {
@@ -563,7 +561,7 @@ function CargarInsumos() {
 
   }
 
-  Acordiones();
+
 }
 // Funciones para cargar las capas de los insumos
 function CargarCapaPlanchas() {
@@ -833,7 +831,7 @@ $(document).ready(function () {
   CargarBtnSplit();
 
   // Mostrando los municipios de la zona de estudio
-
+  Acordiones();
   insumosGenerales[0].capa.addTo(map);
   insumosGenerales[0].active = 1;
   $("#btn_grilla_0").prop("checked", true);
@@ -927,10 +925,13 @@ function CargarDraw() {
       if (geom.type == 'Polygon') {
         polygons.push(geom);
         drawnPolygons.addLayer(layer);
+        layer.on('click', EditNewMap);
+      }else if (geom.type == 'Point'){
+        layer.on('click', EditNewMark);
+        drawnItems.addLayer(layer);
       }else{
         drawnItems.addLayer(layer);
       }
-      layer.on('click', EditNewMark);
     } else{
       var layer = e.layer;
       var geojson = layer.toGeoJSON();
@@ -940,7 +941,7 @@ function CargarDraw() {
         drawnPolygons.addLayer(layer);
       } else if (geom.type == 'LineString') {
         var line = geom;
-        drawnLines.addLayer(layer).on('click', EditNew);
+        drawnLines.addLayer(layer);
         drawnPolygons.clearLayers();
         var newPolygons = [];
         polygons.forEach(function(polygon, index) {
@@ -957,14 +958,14 @@ function CargarDraw() {
                   color: 'red'
                 };
               }
-            }).addTo(drawnPolygons).on('click', EditNew);
+            }).addTo(drawnPolygons).on('click', EditNewMap);
             layer = L.geoJSON(lowerCut, {
               style: function(feature) {
                 return {
                   color: '#3388ff'
                 };
               }
-            }).addTo(drawnPolygons).on('click', EditNew);
+            }).addTo(drawnPolygons).on('click', EditNewMap);
             cutDone = true;
           }
           if (cutDone) {
@@ -979,7 +980,7 @@ function CargarDraw() {
                   color: '#3388ff'
                 };
               }
-            }).addTo(drawnPolygons).on('click', EditNew);
+            }).addTo(drawnPolygons).on('click', EditNewMap);
           }
         });
         polygons = newPolygons;
@@ -1099,8 +1100,8 @@ function cutPolygon(polygon, line, direction, id) {
 
 // ................................Funciones de los formularios
 // Función para resaltar la figura seleccionada
+
 function ResaltarFeat(newFeat, notNew) {
-  var colorNew = '#3388ff';
   var colorSelect = '#fff';
   if (!editMode) {
     if(layergeojsonAnterior==newFeat){
@@ -1108,56 +1109,27 @@ function ResaltarFeat(newFeat, notNew) {
     }else if(layergeojsonAnterior == null){
       layergeojsonAnterior = newFeat
       notNewAnterior = notNew;
-    }else if (notNewAnterior){
-      layergeojsonAnterior.pm.disable();
-      if (layergeojsonAnterior.feature.properties.clase == 'procesos') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[0].color, fillColor: capasDatos[0].color, fillOpacity:0.2})
-      }else if (layergeojsonAnterior.feature.properties.clase == 'geomorfo') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[1].color, fillColor: capasDatos[1].color, fillOpacity:0.2})
-      }else if (layergeojsonAnterior.feature.properties.clase == 'rasgos') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[2].color, fillColor: capasDatos[2].color, fillOpacity:0.2})
-      }else if (layergeojsonAnterior.feature.properties.clase == 'geologia') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[3].color, fillColor: capasDatos[3].color, fillOpacity:0.2})
-      }else if (layergeojsonAnterior.feature.properties.clase == 'estructuras') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[4].color, fillColor: capasDatos[4].color, fillOpacity:0.2})
-      }else if (layergeojsonAnterior.feature.properties.clase == 'morfo') {
-        layergeojsonAnterior.setStyle({weight:3, color : capasDatos[5].color, fillColor: capasDatos[5].color, fillOpacity:0.2})
-      }else{
-        layergeojsonAnterior.setStyle({weight:3, color : colorNew, fillColor: colorNew, fillOpacity:0.2})
+    }else{
+      var geojson = layergeojsonAnterior.toGeoJSON();
+      var geom = turf.getGeom(geojson);
+      if (geom.type == 'Polygon' ||  geom.type == 'FeatureCollection') {
+        layergeojsonAnterior.setStyle({weight:3, color : '#3388ff', fillColor: '#3388ff', fillOpacity:0.2})
+        layergeojsonAnterior.pm.disable();
+      }else if (geom.type == 'Point'){
+        layergeojsonAnterior.pm.disable();
+        layergeojsonAnterior.setIcon(IconDefault);
       }
-    }else{
-      layergeojsonAnterior.pm.disable();
-      layergeojsonAnterior.setStyle({weight:3, color : colorNew, fillColor: colorNew, fillOpacity:0.2})
     }
     layergeojsonAnterior = newFeat;
     notNewAnterior = notNew;
-    newFeat.setStyle({weight:6, color : colorSelect, fillColor: colorSelect, fillOpacity:0.2})
-    newFeat.pm.enable({
-      allowSelfIntersection: true,
-    });
-    newFeat.on('pm:edit', (e) => {
-      layergeojson = e.layer.toGeoJSON();
-    });
-  }
-}
-function ResaltarMark(newFeat, notNew) {
-
-  if (!editMode) {
-    if(layergeojsonAnterior==newFeat){
-  
-    }else if(layergeojsonAnterior == null){
-      layergeojsonAnterior = newFeat
-      notNewAnterior = notNew;
-    }else if (notNewAnterior){
-      layergeojsonAnterior.pm.disable();
-      layergeojsonAnterior.setIcon(IconDefault);
-    }else{
-      layergeojsonAnterior.pm.disable();
-      layergeojsonAnterior.setIcon(IconDefault);
-    }
-    layergeojsonAnterior = newFeat;
-    notNewAnterior = notNew;
-    newFeat.setIcon(IconSelect);
+    var geojson = newFeat.toGeoJSON();
+    var geom = turf.getGeom(geojson);
+    console.log(geom);
+    if (geom.type == 'Polygon' ||  geom.type == 'FeatureCollection') {
+      newFeat.setStyle({weight:6, color : colorSelect, fillColor: colorSelect, fillOpacity:0.2})
+    }else if (geom.type == 'Point'){
+      newFeat.setIcon(IconSelect);
+    }  
     newFeat.pm.enable({
       allowSelfIntersection: true,
     });
@@ -1173,7 +1145,7 @@ function EditNewMark() {
   claseLayer = "nuevo_mark";
   layerEdit = this;
   layergeojson = this.toGeoJSON();
-  ResaltarMark(this, false);
+  ResaltarFeat(this, false);
   countRocks=0;
   fileAflor = null;
   fileZoom = null;
@@ -1226,7 +1198,6 @@ function AñadirRok() {
   );
   countRocks++;
 }
-
 function handleFilesAflor(files, id){
   fileAflor = files[0];
 }
@@ -1241,27 +1212,58 @@ function handleFilesRok(files, id){
 
 function EditNewMap() {
 
-  idLayer = "nuevo";
-  claseLayer = "nuevo";
+  idLayer = "nuevo_map";
+  claseLayer = "nuevo_map";
   layerEdit = this;
   layergeojson = this.toGeoJSON();
   ResaltarFeat(this, false);
+  console.log(layergeojson);
+  if(layergeojson.type == 'FeatureCollection'){
+    layergeojson = layergeojson.features[0];
+    delete layergeojson.properties.id;
+  }
+  console.log(layergeojson);
 
-    $("#UGS_PROPIETARIO").val(uname);
-    $("#UGS_NAME").val('');
-    $("#UGS_CALIDAD").val('No Aplica');
-    $("#UGS_DESCRI").val('');
-    $("#UGS_MAPA").val('02');
-    $("#UGS_VEREDA").val('');
-    $("#UGS_tipo").val('Suelo');
-    $("#UGS_tiporocasuelo").val('Residual');
-    $("#UGS_relieverela").val('Muy bajo');
-    $("#UGS_inclinacionladera").val('Plana >5');
-    $("#UGS_observa").val('');
+  MostrarFormMap();
+  if (!sidebarLeft) {
+    Recarga();
+  }
+}
+function MostrarFormMap() {
+  $("#listSidebarLeft").empty();
+  $("#listSidebarLeft").append(
+    '<li class="title" id="titulo">Formulario Unidad Geológica</li>'+
+    '<li class="sub-title">Nombre de la Unidad<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <input id="nombreUGS" type="text" class="form-control"> </input><i>("Nombre la Unidad")</i></li>'+
+    '<li class="sub-title">Código de la Unidad<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <input id="codigoUGS" type="text" class="form-control"> </input><i>(Asignele un Código a la Unidad)</i></li>'+
+    '<li class="sub-title">Tipo de Roca o Depósito<sup style="color : red">*</sup></li>'+
+    '<li><div class="form-group">'+
+        '<select class="form-control" id="tipoUGS" maxlength="10">'+
+            '<option value="Roca Ígnea">Roca Ígnea</option>'+
+            '<option value="Roca Sedimentaria">Roca Sedimentaria</option>'+
+            '<option value="Roca Metamórfica">Roca Metamórfica</option>'+
+            '<option value="Roca Volcanosedimentaria">Roca Volcanosedimentaria</option>'+
+            '<option value="Aluviones Recientes">Aluviones Recientes</option>'+
+            '<option value="Llanura Aluvial">Llanura Aluvial</option>'+
+            '<option value="Abanicos o Conos">Abanicos o Conos</option>'+
+            '<option value="Terrazas">Terrazas</option>'+
+            '<option value="Flujos (lodo, tierra, escombros)">Flujos (lodo, tierra, escombros)</option>'+
+            '<option value="Talus">Talus</option>'+
+        '</select>'+
+    '</div></li>'+
+    '<li class="sub-title">Descripción de la Unidad<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descriUGS" class="form-control "rows="3"> </textarea><i>(Descripción lo mas detallada posible de las razones o características por las cuales se identificó esta unidad)</i></li>'+
+    '<li class="sub-title">Equipo de Trabajo<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"> </textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
+    '<li class="sub-title">Plancha<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="plancha" class="form-control"rows="1"> </textarea><i>(Escriba el nombre de la plancha donde se encuentre la estación)</i></li>'+
+    '<li class="sub-title">Fecha</li>'+
+    '<li class="sb-text"> <input type="date" class="form-control" id="fecha"></li>'+
 
-    if (!sidebarLeft) {
-      Recarga();
-    }
+    '<a class="btn-descargar" id="markSave" onclick="GuardarMap()" type="button"><i class="fas fa-save"></i> Guardar </a>'
+    );
+    $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
 }
 // Función que se llama al seleccionar una figura ya existente
 function EditExistMark(e) {
@@ -1270,7 +1272,7 @@ function EditExistMark(e) {
   layergeojson = e.layer.toGeoJSON();
   idLayer = layergeojson.properties.id;
   claseLayer = layergeojson.properties.clase;
-  ResaltarMark(e.layer, true);
+  ResaltarFeat(e.layer, true);
   console.log(e.layer.toGeoJSON());
 
   $("#listSidebarLeft").empty();
@@ -1321,15 +1323,20 @@ function EditExistMap(e) {
   layergeojson = e.layer.toGeoJSON();
   idLayer = layergeojson.properties.id;
   claseLayer = layergeojson.properties.clase;
+  semestreLayer = layergeojson.properties.semestre;
   ResaltarFeat(e.layer, true);
   console.log(e.layer.toGeoJSON());
-  
-  if (claseLayer == 'estructuras') {
-    $("#LIN_CODE").val(layergeojson.properties.Codigo);
-    $("#LIN_TIPO").val(layergeojson.properties.Tipo);
-    $("#LIN_NOM").val(layergeojson.properties.NombreLineamiento);
-    $("#LIN_COMENT").val(layergeojson.properties.Comentarios);
-  }
+  MostrarFormMap();
+  $("#listSidebarLeft").append(
+    '<a class="btn-descargar" id="delete" onclick="EliminarFeat()" type="button"><i class="fas fa-times"></i> Eliminar </a>'
+  );
+  $("#nombreUGS").val(layergeojson.properties.Nom_UGS);
+  $("#codigoUGS").val(layergeojson.properties.Cod_UGS);
+  $("#tipoUGS").val(layergeojson.properties.Tipo_UGS);
+  $("#descriUGS").val(layergeojson.properties.Descri_UGS);
+  $("#recolectors").val(layergeojson.properties.grupo);
+  $("#fecha").val(layergeojson.properties.fecha);
+  $("#plancha").val(layergeojson.properties.plancha);
   if (!sidebarLeft) {
     Recarga();
   }
@@ -1494,22 +1501,130 @@ function GuardarenBD() {
   });
 }
 
+function GuardarMap(params) {
+  if (layergeojson !== null && claseLayer == 'nuevo_map') {
+    var isCorrect = true;
+    var idsMark = ["nombreUGS", "codigoUGS", "tipoUGS", "descriUGS", "recolectors", "plancha"];
+    for (let i = 0; i < idsMark.length; i++) {
+      if(!validar(idsMark[i])){
+        isCorrect = false;
+      }
+    }
+
+    if (isCorrect) {
+      map.spin(true, spinOpts);
+      
+      L.extend(layergeojson.properties, {
+        Nom_UGS: $("#nombreUGS").val(),
+        Cod_UGS: $("#codigoUGS").val(),
+        Tipo_UGS: $("#tipoUGS").val(),
+        Descri_UGS: $("#descriUGS").val(),
+        grupo: $("#recolectors").val(),
+        fecha: $("#fecha").val(),
+        plancha: $("#plancha").val(),
+      });
+
+      database.ref().child("semestres").get().then((snapshot) => {
+        if (snapshot.exists()) {
+          semestres = snapshot.val();
+          var semestreCount = semestres['count'] - 1;
+          database.ref().child("geomapas/"+semestres['semestre_'+semestreCount]+"/count").get().then((snapshot) => {
+            if (snapshot.exists()) {
+              var aux = snapshot.val();
+              var newCount = parseInt(aux["count"])+1;
+              database.ref("geomapas/"+semestres['semestre_'+semestreCount]+"/count").set({
+                count : newCount
+              });
+              database.ref("geomapas/"+semestres['semestre_'+semestreCount]+"/feat_"+aux["count"]).set({
+                id: aux["count"],
+                uid: uid,
+                activo: true,
+                layergeojson : layergeojson
+              });
+              map.spin(false);
+              alert("Guardado con Éxito");                                                
+            } else {
+              console.log("No data available");
+            }
+          }).catch((error) => {
+            console.error(error);
+          });
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }else{
+      alert("Por Favor Llene Todos los Campos");
+    }
+  }
+  if (layergeojson !== null && claseLayer == 'geomapas') {
+    var isCorrect = true;
+    var idsMark = ["nombreUGS", "codigoUGS", "tipoUGS", "descriUGS", "recolectors", "plancha"];
+    for (let i = 0; i < idsMark.length; i++) {
+      if(!validar(idsMark[i])){
+        isCorrect = false;
+      }
+    }
+
+    if (isCorrect) {
+      map.spin(true, spinOpts);
+      
+      L.extend(layergeojson.properties, {
+        Nom_UGS: $("#nombreUGS").val(),
+        Cod_UGS: $("#codigoUGS").val(),
+        Tipo_UGS: $("#tipoUGS").val(),
+        Descri_UGS: $("#descriUGS").val(),
+        grupo: $("#recolectors").val(),
+        fecha: $("#fecha").val(),
+        plancha: $("#plancha").val(),
+      });
+      var semestre = layergeojson.properties.semestre;
+
+      delete layergeojson.properties.semestre;
+      delete layergeojson.properties.id;
+      delete layergeojson.properties.clase;
+      delete layergeojson.properties._feature;
+      delete layergeojson.layer;
+    
+      database.ref("geomapas/"+semestre+"/feat_"+id).set({
+        id: idLayer,
+        uid: uid,
+        activo: true,
+        layergeojson : layergeojson
+      });
+      map.spin(false);
+      alert("Guardado con Éxito");                                                
+         
+    }else{
+      alert("Por Favor Llene Todos los Campos");
+    }
+  }
+  if (layergeojson == null) {
+    alert("Seleccione el Marcador a Guardar");
+  }
+  if (claseLayer != 'nuevo_map' || claseLayer != 'geomapas') {
+    alert("Esto No es un Poligono");
+  }
+}
+
 // Función para eliminar una figura
-$("#deleteFeat").click(function (e) { 
-  e.preventDefault();
-  if (univel == 'admin' || univel > 1) {
-    delete layergeojson.properties.nombreclase;
+function EliminarFeat() {
+  if (true) {
     delete layergeojson.properties.clase;
     delete layergeojson.properties.id;
-    delete layergeojson.properties.codigo;
-    delete layergeojson.properties.descripcion;
-    delete layergeojson.properties.fecha;
-    delete layergeojson.properties.nombre;
-    delete layergeojson.properties.propietario;
-    delete layergeojson.properties.zona;
+    delete layergeojson.properties.semestre;
     delete layergeojson.layer;
     delete layergeojson.properties._feature;
-    database.ref('features/'+claseLayer+'/feature_'+idLayer).set({
+    var clasAux;
+    if (claseLayer == 'marcadores') {
+      clasAux = 'mark_';
+    }else{
+      clasAux = 'feat_';
+    }
+
+    database.ref(claseLayer+'/'+semestreLayer+'/'+clasAux+idLayer).set({
       id: idLayer,
       uid: uid,
       activo: false,
@@ -1521,7 +1636,7 @@ $("#deleteFeat").click(function (e) {
     alert('Usted no posee los permisos necesarios para borrar esta Figura');
   }  
 
-});
+}
 
 
 // ................................Funciones para Cargar y Cambiar el Mapa Base 
