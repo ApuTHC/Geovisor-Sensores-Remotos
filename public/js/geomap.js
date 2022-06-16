@@ -16,6 +16,7 @@ var colorguardar = false;
 var notNewAnterior = false;
 var idLayer ='nuevo';
 var claseLayer = 'nuevo';
+var savelayer;
 var forma = null;
 var searchCtrl;
 var editMode = false;
@@ -1171,28 +1172,28 @@ function EditNewMark() {
   $("#listSidebarLeft").append(
     '<li class="title" id="titulo">Formulario Afloramiento</li>'+
     '<li class="sub-title">Nombre de la Estación<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="nombre" class="form-control"rows="1"> </textarea><i>("Estación ##, Grupo # Semestre 202#-#")</i></li>'+
+    '<li class="sb-text"> <textarea id="nombre" class="form-control"rows="1"></textarea><i>("Estación ##, Grupo # Semestre 202#-#")</i></li>'+
     '<li class="sub-title">Código de la Estación<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="codigo" class="form-control"rows="1"> </textarea><i>("E##-G#-2#-#")</i></li>'+
+    '<li class="sb-text"> <textarea id="codigo" class="form-control"rows="1"></textarea><i>("E##-G#-2#-#")</i></li>'+
     '<li class="sub-title">Ubicación del Afloramiento<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="descrigene" class="form-control"rows="2"> </textarea><i>(Descripción lo mas detallada posible de la ubicación del afloramiento)</i></li>'+
+    '<li class="sb-text"> <textarea id="descrigene" class="form-control"rows="2"></textarea><i>(Descripción lo mas detallada posible de la ubicación del afloramiento)</i></li>'+
     '<li class="sub-title">Foto del Afloramiento<sup style="color : red">*</sup></li>'+
     '<li class="form_foto"><input type="file" id="fotoAflor" onchange="handleFilesAflor(this.files, id)"><br><i>(Formato .jpg)</i></li>'+
     '<li class="sub-title">Descripción del Afloramiento<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="descriaflor" class="form-control"rows="2"> </textarea><i>(Descripción detallada del afloramiento)</i></li>'+
+    '<li class="sb-text"> <textarea id="descriaflor" class="form-control"rows="2"></textarea><i>(Descripción detallada del afloramiento)</i></li>'+
     '<li class="sub-title">Estructuras del Afloramiento<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="descriestruct" class="form-control"rows="2"> </textarea><i>(Descripción detallada de las estructuras presentes en el afloramiento)</i></li>'+
+    '<li class="sb-text"> <textarea id="descriestruct" class="form-control"rows="2"></textarea><i>(Descripción detallada de las estructuras presentes en el afloramiento)</i></li>'+
     '<li class="sub-title">Foto de Detalle Afloramiento<sup style="color : red">*</sup></li>'+
     '<li class="form_foto"><input type="file" id="fotoAflor" onchange="handleFilesZoom(this.files, id)"><br><i>(Formato .jpg)</i></li>'+
     '<li class="sub-title">Meteorización del Afloramiento<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="descrimeteor" class="form-control"rows="2"> </textarea><i>(Descripción detallada de la meteorización presente en el afloramiento)</i></li>'+
+    '<li class="sb-text"> <textarea id="descrimeteor" class="form-control"rows="2"></textarea><i>(Descripción detallada de la meteorización presente en el afloramiento)</i></li>'+
     '<li class="sub-title">Descripción Litologías</li>'+
     '<a class="btn-descargar" id="btnGuardarMark" onclick="AñadirRok()" type="button"><i class="fas fa-plus"></i> Añadir Litología </a>'+
     '<div id="rocas"></div>'+
     '<li class="sub-title">Equipo de Trabajo<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"> </textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
+    '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"></textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
     '<li class="sub-title">Plancha<sup style="color : red">*</sup></li>'+
-    '<li class="sb-text"> <textarea id="plancha" class="form-control"rows="1"> </textarea><i>(Escriba el nombre de la plancha donde se encuentre la estación)</i></li>'+
+    '<li class="sb-text"> <textarea id="plancha" class="form-control"rows="1"></textarea><i>(Escriba el nombre de la plancha donde se encuentre la estación)</i></li>'+
     '<li class="sub-title">Fecha</li>'+
     '<li class="sb-text"> <input type="date" class="form-control" id="fecha"></li>'+
 
@@ -1301,6 +1302,7 @@ function EditExistMark(e) {
   layergeojson = e.layer.toGeoJSON();
   idLayer = layergeojson.properties.id;
   claseLayer = layergeojson.properties.clase;
+  semestreLayer = layergeojson.properties.semestre;
   ResaltarFeat(e.layer, true);
   console.log(e.layer.toGeoJSON());
 
@@ -1323,7 +1325,9 @@ function EditExistMark(e) {
     '<li class="sub-title">Equipo de Trabajo</li>'+
     '<li class="sb-text" id="recolectors"> Recolectores</li>'+
     '<li class="sub-title">Fecha</li>'+
-    '<li class="sb-text" id="fecha"> Fecha</li>'
+    '<li class="sb-text" id="fecha"> Fecha</li>'+
+
+    '<a class="btn-descargar" id="markEdit" onclick="EditarMark()" type="button"><i class="fas fa-edit"></i> Editar </a>'
   );
 
   $('#titulo').html(''+ layergeojson.properties.nombre);
@@ -1335,12 +1339,13 @@ function EditExistMark(e) {
   $('#fecha').html(''+layergeojson.properties.fecha);
   $("#aflor1").attr('src' , layergeojson.properties.aflor);
   $("#aflor2").attr('src' , layergeojson.properties.aflorzoom);
+  $("#plancha").attr('src' , layergeojson.properties.plancha);
   $("#rocas").empty();
   for (let i = 0; i < layergeojson.properties.rocas; i++) {
     $("#rocas").append(
       '<li class="sb-img"><img id="macro_'+i+'" src="'+layergeojson.properties['roca_'+i]+'"></li>'+
-      '<li class="sb-text" id="descri_roca_'+i+'"> '+layergeojson.properties['des_rok_'+i]+'</li>'
-    );
+      '<li class="sb-text" id="descri_roca_'+i+'"> '+layergeojson.properties['des_rok_'+i]+'</li>'  //'<li class="sb-text"> <textarea id="des_rok_'+ countRocks +'" class="form-control"rows="2"> </textarea><i>(Descripción detallada de la roca)</i></li>'+
+      );
   }
 
   if (!sidebarLeft) {
@@ -1456,7 +1461,7 @@ function GuardarMark(){
           storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflor.jpg').put(fileAflor).then((snapshot) => {
             storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflor.jpg').getDownloadURL().then(function(url) {
               layergeojson.properties['aflor'] = url;
-              storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflorzoom.jpg').put(fileAflor).then((snapshot) => {
+              storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflorzoom.jpg').put(fileZoom).then((snapshot) => {
                 storageRef.child('semestre_'+semestreCount+'/'+grupo+'/'+cod+'/aflorzoom.jpg').getDownloadURL().then(function(url) {
                   layergeojson.properties['aflorzoom'] = url;
                   if (fileRock.length>0) {
@@ -1500,6 +1505,115 @@ function GuardarMark(){
     alert("Esto No es un Marcador");
   }
 }
+function GuardarMark1(){
+  
+    var isCorrect = true;
+    var idsMark = ["descrigene", "descriaflor", "descriestruct", "descrimeteor", "recolectors", "plancha"];
+    for (let i = 0; i < idsMark.length; i++) {
+      if(!validar(idsMark[i])){
+        isCorrect = false;
+      }
+    }
+
+    if (isCorrect) {
+      map.spin(true, spinOpts);
+
+      savelayer = layergeojson;
+      var semestre = layergeojson.properties.semestre;
+
+      delete savelayer.properties.semestre;
+      delete savelayer.properties.id;
+      delete savelayer.properties.clase;
+      delete savelayer.properties._feature;
+      delete savelayer.layer;
+
+      L.extend(layergeojson.properties, {
+        des_pos: $("#descrigene").val(),
+        des_aflor: $("#descriaflor").val(),
+        des_struct: $("#descriestruct").val(),
+        des_meteor: $("#descrimeteor").val(),
+        grupo: $("#recolectors").val(),
+        fecha: $("#fecha").val(),
+        plancha: $("#plancha").val(),
+        
+      });
+
+      layergeojson.properties.id = idLayer;  
+      layergeojson.properties.semestre = semestre;  
+      layergeojson.properties.clase = claseLayer;   
+      
+      var semestreCount = semestres['count'] - 1;
+    
+      
+      database.ref("marcadores/"+semestre+"/mark_"+idLayer).set({
+        id: idLayer,
+        uid: uid,
+        activo: true,
+        layergeojson : savelayer
+      });
+      map.spin(false);
+      
+      alert("Guardado con Éxito");                                                
+    
+
+
+      
+    }else{
+      alert("Por Favor Llene Todos los Campos y Agregue Todas las Fotos");
+    }
+  
+
+}
+
+function EditarMark(){
+  $("#listSidebarLeft").empty();
+  $("#listSidebarLeft").append(
+
+    '<li class="sub-title">Ubicación del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descrigene" class="form-control"rows="2"> </textarea><i>(Descripción lo mas detallada posible de la ubicación del afloramiento)</i></li>'+
+    '<li class="sub-title">Foto del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="form_foto"><img class="img-fluid" id="aflor1"></li>'+
+    '<li class="sub-title">Descripción del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descriaflor" class="form-control"rows="2"> </textarea><i>(Descripción detallada del afloramiento)</i></li>'+
+    '<li class="sub-title">Estructuras del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descriestruct" class="form-control"rows="2"> </textarea><i>(Descripción detallada de las estructuras presentes en el afloramiento)</i></li>'+
+    '<li class="sub-title">Foto de Detalle Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="form_foto"><img class="img-fluid" id="aflor2"></li>'+
+    '<li class="sub-title">Meteorización del Afloramiento<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="descrimeteor" class="form-control"rows="2"> </textarea><i>(Descripción detallada de la meteorización presente en el afloramiento)</i></li>'+
+    '<li class="sub-title">Descripción Litologías</li>'+
+    '<div id="rocas"></div>'+
+    '<li class="sub-title">Equipo de Trabajo<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"> </textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
+    '<li class="sub-title">Plancha<sup style="color : red">*</sup></li>'+
+    '<li class="sb-text"> <textarea id="plancha" class="form-control"rows="1"> </textarea><i>(Escriba el nombre de la plancha donde se encuentre la estación)</i></li>'+
+    '<li class="sub-title">Fecha</li>'+
+    '<li class="sb-text"> <input type="date" class="form-control" id="fecha"></li>'+
+
+    '<a class="btn-descargar" id="markSave" onclick="GuardarMark1()" type="button"><i class="fas fa-save"></i> Guardar </a>'+
+    '<a class="btn-descargar" id="delete" onclick="EliminarFeat()" type="button"><i class="fas fa-times"></i> Eliminar </a>'
+    );
+
+    $('#titulo').html(''+ layergeojson.properties.nombre);
+  $('#descrigene').html(''+layergeojson.properties.des_pos);
+  $('#descriaflor').html(''+layergeojson.properties.des_aflor);
+  $('#descriestruct').html(''+layergeojson.properties.des_struct);
+  $('#descrimeteor').html(''+layergeojson.properties.des_meteor);
+  $('#recolectors').html(''+layergeojson.properties.grupo);
+  $('#fecha').html(''+layergeojson.properties.fecha);
+  $("#aflor1").attr('src' , layergeojson.properties.aflor);
+  $("#aflor2").attr('src' , layergeojson.properties.aflorzoom);
+  $("#plancha").attr('src' , layergeojson.properties.plancha);
+  $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
+  $("#rocas").empty();
+  for (let i = 0; i < layergeojson.properties.rocas; i++) {
+    $("#rocas").append(
+      '<li class="sb-img"><img id="macro_'+i+'" src="'+layergeojson.properties['roca_'+i]+'"></li>'+
+      '<li class="sb-text" id="descri_roca_'+i+'"> '+layergeojson.properties['des_rok_'+i]+'</li>'
+    );
+  }
+    
+}
 
 function ImgSaved() {
   if (!urlRockCheck.includes(false)) {
@@ -1523,6 +1637,7 @@ function GuardarenBD() {
         layergeojson : layergeojson
       });
       map.spin(false);
+      
       alert("Guardado con Éxito");                                                
     } else {
       console.log("No data available");
@@ -1656,8 +1771,6 @@ function GuardarMap() {
       layergeojson.properties.id = idLayer;  
       layergeojson.properties.semestre = semestre;  
       layergeojson.properties.clase = claseLayer;                                    
-      console.log(layergeojson);
-      console.log(allData.toGeoJSON())
     }else{
       alert("Por Favor Llene Todos los Campos");
     }
