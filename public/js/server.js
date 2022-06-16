@@ -16,6 +16,7 @@ var storage = firebase.storage();
 var storageRef = storage.ref();
 
 var uid;
+var univel;
 
 // FirebaseUI config.
 var uiConfig = {
@@ -70,8 +71,11 @@ var uiConfig = {
                 email : email,
                 photo : photoURL,
                 uid : uid,
+                nivel : 1,
                 semestre : "2022-1"
               });
+            }else{
+              univel = snapshot.val().nivel;
             } 
           }).catch((error) => {
             console.error(error);

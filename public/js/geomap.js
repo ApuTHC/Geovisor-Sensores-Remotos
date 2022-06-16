@@ -29,6 +29,8 @@ var fileAflor = null;
 var fileZoom = null;
 var urlRockCheck = [];
 var fileRock =[];
+var datosCopiadosMap = {};
+var datosCopiadosMark = {};
 // Opciones del Spin
 var spinOpts = {
   lines: 10, // The number of lines to draw
@@ -1112,22 +1114,36 @@ function ResaltarFeat(newFeat, notNew) {
   
     }else if(layergeojsonAnterior == null){
       layergeojsonAnterior = newFeat
+      console.log(layergeojsonAnterior.toGeoJSON())
       notNewAnterior = notNew;
     }else{
       var geojson = layergeojsonAnterior.toGeoJSON();
       var geom = turf.getGeom(geojson);
       if (geom.type == 'Polygon' ||  geom.type == 'FeatureCollection') {
         var colorant;
-        console.log(Object.entries(geojson.properties).length);
-        if (Object.entries(geojson.properties).length === 0) {
-          if(colorguardar){
-            colorguardar = false;
-            colorant = coloranterior;
+        if (geom.type == 'FeatureCollection') {
+          if (Object.entries(geojson.features[0].properties).length === 0) {
+            if(colorguardar){
+              colorguardar = false;
+              colorant = coloranterior;
+            }else{
+              colorant = '#3388ff';
+            }
           }else{
-            colorant = '#3388ff';
+            colorant = geojson.properties.color;
           }
+          
         }else{
-          colorant = geojson.properties.color;
+          if (Object.entries(geojson.properties).length === 0) {
+            if(colorguardar){
+              colorguardar = false;
+              colorant = coloranterior;
+            }else{
+              colorant = '#3388ff';
+            }
+          }else{
+            colorant = geojson.properties.color;
+          }
         }
         layergeojsonAnterior.setStyle({weight:3, color : colorant, fillColor: colorant, fillOpacity:0.2})
         layergeojsonAnterior.pm.disable();
@@ -1171,6 +1187,18 @@ function EditNewMark() {
   $("#listSidebarLeft").empty();
   $("#listSidebarLeft").append(
     '<li class="title" id="titulo">Formulario Afloramiento</li>'+
+    '<li>'+
+        '<div id="botones-form" class="mt-4 mb-0 d-flex justify-content-end">'+
+            '<span id="boton-copiar" class="mr-3 boton-copiar">'+
+                '<span id="tooltip-copiar" class="tooltip-copiar">Copiar formulario</span>'+
+                '<button id="copiar-form-mark" class="copiar-form"><i class="far fa-copy"></i></button>'+
+            '</span>'+
+            '<span id="boton-pegar" class="boton-pegar">'+
+                '<span id="tooltip-pegar" class="tooltip-pegar">Pegar</span>'+
+                '<button id="pegar-form-mark" class="pegar-form habilitar-pegar" style="cursor: pointer;"><i class="far fa-clipboard"></i></button>'+
+            '</span>'+
+        '</div>'+
+    '</li>'+
     '<li class="sub-title">Nombre de la Estación<sup style="color : red">*</sup></li>'+
     '<li class="sb-text"> <textarea id="nombre" class="form-control"rows="1"></textarea><i>("Estación ##, Grupo # Semestre 202#-#")</i></li>'+
     '<li class="sub-title">Código de la Estación<sup style="color : red">*</sup></li>'+
@@ -1200,6 +1228,47 @@ function EditNewMark() {
     '<a class="btn-descargar" id="markSave" onclick="GuardarMark()" type="button"><i class="fas fa-save"></i> Guardar </a>'
     );
     $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
+
+    $("#copiar-form-mark").click(function(e){
+      e.preventDefault();
+      $("#tooltip-copiar").html("Copiado!")
+      $("#pegar-form-mark")
+        .addClass("habilitar-pegar")
+        .css("cursor", "pointer");
+
+
+      datosCopiadosMark = {
+
+        des_pos_: $("#descrigene").val(),
+        des_aflor_ : $("#descriaflor").val(),
+        des_struct_ : $("#descriestruct").val(),
+        des_meteor_ : $("#descrimeteor").val(),
+        grupo_: $("#recolectors").val(),
+        fecha_ : $("#fecha").val(),
+        plancha_ : $("#plancha").val(),
+                
+      }
+    
+      setTimeout(()=>{
+        $("#tooltip-copiar").html("Copiar formulario")
+      },2000)
+      
+      //console.log(datosCopiados);
+    
+    })
+    $("#pegar-form-mark").click(function(e){
+      e.preventDefault();
+      if(datosCopiadosMark){
+        $("#descrigene").val(datosCopiadosMark['des_pos_']);
+        $("#descriaflor").val(datosCopiadosMark['des_aflor_']);
+        $("#descriestruct").val(datosCopiadosMark['des_struct_']);
+        $("#descrimeteor").val(datosCopiadosMark['des_meteor_']);
+        $("#recolectors").val(datosCopiadosMark['grupo_']);
+        $("#fecha").val(datosCopiadosMark['fecha_']);
+        $("#plancha").val(datosCopiadosMark['plancha_']);
+      }
+      
+    })
 
   if (!sidebarLeft) {
     Recarga();
@@ -1233,13 +1302,13 @@ function EditNewMap() {
   layerEdit = this;
   layergeojson = this.toGeoJSON();
   ResaltarFeat(this, false);
-  console.log(layergeojson);
+  console.log(layerEdit);
   if(layergeojson.type == 'FeatureCollection'){
     layergeojson = layergeojson.features[0];
     delete layergeojson.properties.id;
   }
   console.log(layergeojson);
-
+  layergeojson.properties ={};
   MostrarFormMap();
   if (!sidebarLeft) {
     Recarga();
@@ -1249,6 +1318,18 @@ function MostrarFormMap() {
   $("#listSidebarLeft").empty();
   $("#listSidebarLeft").append(
     '<li class="title" id="titulo">Formulario Unidad Geológica</li>'+
+    '<li>'+
+        '<div id="botones-form" class="mt-4 mb-0 d-flex justify-content-end">'+
+            '<span id="boton-copiar" class="mr-3 boton-copiar">'+
+                '<span id="tooltip-copiar" class="tooltip-copiar">Copiar formulario</span>'+
+                '<button id="copiar-form-proc" class="copiar-form"><i class="far fa-copy"></i></button>'+
+            '</span>'+
+            '<span id="boton-pegar" class="boton-pegar">'+
+                '<span id="tooltip-pegar" class="tooltip-pegar">Pegar</span>'+
+                '<button id="pegar-form-proc" class="pegar-form habilitar-pegar" style="cursor: pointer;"><i class="far fa-clipboard"></i></button>'+
+            '</span>'+
+        '</div>'+
+    '</li>'+
     '<li class="sub-title">Nombre de la Unidad<sup style="color : red">*</sup></li>'+
     '<li class="sb-text"> <input id="nombreUGS" type="text" class="form-control"> </input><i>("Nombre la Unidad")</i></li>'+
     '<li class="sub-title">Código de la Unidad<sup style="color : red">*</sup></li>'+
@@ -1293,6 +1374,57 @@ function MostrarFormMap() {
         fillColor: e.value
       });
     });
+
+    $("#copiar-form-proc").click(function(e){
+      e.preventDefault();
+      $("#tooltip-copiar").html("Copiado!")
+      $("#pegar-form-proc")
+        .addClass("habilitar-pegar")
+        .css("cursor", "pointer");
+
+        var colorsito = $('#cp_UGS').colorpicker('getValue').replace("rgb(","");
+        console.log(colorsito );
+        colorsito = colorsito.replace(")","");
+        console.log(colorsito );
+        colorsito = colorsito.split(",");
+
+        colorsito1 = "#" + ((1 << 24) + (parseInt(colorsito[0]) << 16) + (parseInt(colorsito[1]) << 8) + parseInt(colorsito[2])).toString(16).slice(1);
+
+      datosCopiadosMap = {
+
+        Nom_UGS_: $("#nombreUGS").val(),
+        Cod_UGS_ : $("#codigoUGS").val(),
+        Tipo_UGS_ : $("#tipoUGS").val(),
+        Descri_UGS_ : $("#descriUGS").val(),
+        grupo_: $("#recolectors").val(),
+        fecha_ : $("#fecha").val(),
+        plancha_ : $("#plancha").val(),
+        color_ : colorsito1,
+                
+      }
+    
+      setTimeout(()=>{
+        $("#tooltip-copiar").html("Copiar formulario")
+      },2000)
+      
+      //console.log(datosCopiados);
+    
+    })
+    $("#pegar-form-proc").click(function(e){
+      e.preventDefault();
+      if(datosCopiadosMap){
+        $("#nombreUGS").val(datosCopiadosMap['Nom_UGS_']);
+        $("#codigoUGS").val(datosCopiadosMap['Cod_UGS_']);
+        $("#tipoUGS").val(datosCopiadosMap['Tipo_UGS_']);
+        $("#descriUGS").val(datosCopiadosMap['Descri_UGS_']);
+        $("#recolectors").val(datosCopiadosMap['grupo_']);
+        $("#fecha").val(datosCopiadosMap['fecha_']);
+        $("#plancha").val(datosCopiadosMap['plancha_']);
+        $("#cp_UGS").colorpicker('setValue', datosCopiadosMap['color_']);
+        $("#cp_UGS i").css( 'background',datosCopiadosMap['color_']);
+      }
+      
+    })
     
 }
 // Función que se llama al seleccionar una figura ya existente
@@ -1339,7 +1471,7 @@ function EditExistMark(e) {
   $('#fecha').html(''+layergeojson.properties.fecha);
   $("#aflor1").attr('src' , layergeojson.properties.aflor);
   $("#aflor2").attr('src' , layergeojson.properties.aflorzoom);
-  $("#plancha").attr('src' , layergeojson.properties.plancha);
+  $("#plancha").html(''+layergeojson.properties.plancha);
   $("#rocas").empty();
   for (let i = 0; i < layergeojson.properties.rocas; i++) {
     $("#rocas").append(
@@ -1372,7 +1504,9 @@ function EditExistMap(e) {
   $("#recolectors").val(layergeojson.properties.grupo);
   $("#fecha").val(layergeojson.properties.fecha);
   $("#plancha").val(layergeojson.properties.plancha);
-  $("#cp_UGS i" ).css( 'background',layergeojson.properties.color);
+  $("#cp_UGS").val(layergeojson.properties.color);
+  $("#cp_UGS").colorpicker('setValue', layergeojson.properties.color);
+  $("#cp_UGS i" ).css( 'background', layergeojson.properties.color);
   if (!sidebarLeft) {
     Recarga();
   }
@@ -1568,7 +1702,19 @@ function GuardarMark1(){
 function EditarMark(){
   $("#listSidebarLeft").empty();
   $("#listSidebarLeft").append(
-
+    '<li class="title" id="titulo">Formulario Afloramiento</li>'+
+    '<li>'+
+        '<div id="botones-form" class="mt-4 mb-0 d-flex justify-content-end">'+
+            '<span id="boton-copiar" class="mr-3 boton-copiar">'+
+                '<span id="tooltip-copiar" class="tooltip-copiar">Copiar formulario</span>'+
+                '<button id="copiar-form-mark" class="copiar-form"><i class="far fa-copy"></i></button>'+
+            '</span>'+
+            '<span id="boton-pegar" class="boton-pegar">'+
+                '<span id="tooltip-pegar" class="tooltip-pegar">Pegar</span>'+
+                '<button id="pegar-form-mark" class="pegar-form habilitar-pegar" style="cursor: pointer;"><i class="far fa-clipboard"></i></button>'+
+            '</span>'+
+        '</div>'+
+    '</li>'+
     '<li class="sub-title">Ubicación del Afloramiento<sup style="color : red">*</sup></li>'+
     '<li class="sb-text"> <textarea id="descrigene" class="form-control"rows="2"> </textarea><i>(Descripción lo mas detallada posible de la ubicación del afloramiento)</i></li>'+
     '<li class="sub-title">Foto del Afloramiento<sup style="color : red">*</sup></li>'+
@@ -1594,7 +1740,7 @@ function EditarMark(){
     '<a class="btn-descargar" id="delete" onclick="EliminarFeat()" type="button"><i class="fas fa-times"></i> Eliminar </a>'
     );
 
-    $('#titulo').html(''+ layergeojson.properties.nombre);
+  $('#titulo').html(''+ layergeojson.properties.nombre);
   $('#descrigene').html(''+layergeojson.properties.des_pos);
   $('#descriaflor').html(''+layergeojson.properties.des_aflor);
   $('#descriestruct').html(''+layergeojson.properties.des_struct);
@@ -1603,7 +1749,7 @@ function EditarMark(){
   $('#fecha').html(''+layergeojson.properties.fecha);
   $("#aflor1").attr('src' , layergeojson.properties.aflor);
   $("#aflor2").attr('src' , layergeojson.properties.aflorzoom);
-  $("#plancha").attr('src' , layergeojson.properties.plancha);
+  $("#plancha").html(''+layergeojson.properties.plancha);
   $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
   $("#rocas").empty();
   for (let i = 0; i < layergeojson.properties.rocas; i++) {
@@ -1612,7 +1758,48 @@ function EditarMark(){
       '<li class="sb-text" id="descri_roca_'+i+'"> '+layergeojson.properties['des_rok_'+i]+'</li>'
     );
   }
+
+  $("#copiar-form-mark").click(function(e){
+    e.preventDefault();
+    $("#tooltip-copiar").html("Copiado!")
+    $("#pegar-form-mark")
+      .addClass("habilitar-pegar")
+      .css("cursor", "pointer");
+
+
+    datosCopiadosMark = {
+
+      des_pos_: $("#descrigene").val(),
+      des_aflor_ : $("#descriaflor").val(),
+      des_struct_ : $("#descriestruct").val(),
+      des_meteor_ : $("#descrimeteor").val(),
+      grupo_: $("#recolectors").val(),
+      fecha_ : $("#fecha").val(),
+      plancha_ : $("#plancha").val(),
+              
+    }
+  
+    setTimeout(()=>{
+      $("#tooltip-copiar").html("Copiar formulario")
+    },2000)
     
+    //console.log(datosCopiados);
+  
+  });
+  $("#pegar-form-mark").click(function(e){
+    e.preventDefault();
+    if(datosCopiadosMark){
+      $("#descrigene").val(datosCopiadosMark['des_pos_']);
+      $("#descriaflor").val(datosCopiadosMark['des_aflor_']);
+      $("#descriestruct").val(datosCopiadosMark['des_struct_']);
+      $("#descrimeteor").val(datosCopiadosMark['des_meteor_']);
+      $("#recolectors").val(datosCopiadosMark['grupo_']);
+      $("#fecha").val(datosCopiadosMark['fecha_']);
+      $("#plancha").val(datosCopiadosMark['plancha_']);
+    }
+    
+  });
+  
 }
 
 function ImgSaved() {
@@ -1660,7 +1847,7 @@ function GuardarMap() {
     if (isCorrect) {
       map.spin(true, spinOpts);
       
-
+      layergeojsonAnterior.toGeoJSON().properties = {};
       var colorsito = $('#cp_UGS').colorpicker('getValue').replace("rgb(","");
       console.log(colorsito );
       colorsito = colorsito.replace(")","");
@@ -1785,7 +1972,7 @@ function GuardarMap() {
 
 // Función para eliminar una figura
 function EliminarFeat() {
-  if (true) {
+  if (univel > 1) {
     delete layergeojson.properties.clase;
     delete layergeojson.properties.id;
     delete layergeojson.properties.semestre;
