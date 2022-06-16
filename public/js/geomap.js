@@ -11,6 +11,8 @@ var allData = L.layerGroup();
 var layerEdit=null;
 var layergeojson = null;
 var layergeojsonAnterior = null;
+var coloranterior ='';
+var colorguardar = false;
 var notNewAnterior = false;
 var idLayer ='nuevo';
 var claseLayer = 'nuevo';
@@ -207,6 +209,7 @@ function CargarCapaDatos() {
                 }
               })
               .bindPopup(popupMaps)
+              .setStyle({color: this.database['feat_'+i]['layergeojson'].properties.color})
               .addTo(this.capa)
               .addTo(allData)
               .on('click', function(e) {
@@ -1004,9 +1007,9 @@ function CargarDraw() {
     drawCircle: false,
     drawCircleMarker: false,
     editMode: false,
-    dragMode:true,
+    dragMode:false,
     cutPolygon:false,
-    removalMode: false,
+    removalMode: true,
     rotateMode: false
   });
 }
@@ -1113,7 +1116,19 @@ function ResaltarFeat(newFeat, notNew) {
       var geojson = layergeojsonAnterior.toGeoJSON();
       var geom = turf.getGeom(geojson);
       if (geom.type == 'Polygon' ||  geom.type == 'FeatureCollection') {
-        layergeojsonAnterior.setStyle({weight:3, color : '#3388ff', fillColor: '#3388ff', fillOpacity:0.2})
+        var colorant;
+        console.log(Object.entries(geojson.properties).length);
+        if (Object.entries(geojson.properties).length === 0) {
+          if(colorguardar){
+            colorguardar = false;
+            colorant = coloranterior;
+          }else{
+            colorant = '#3388ff';
+          }
+        }else{
+          colorant = geojson.properties.color;
+        }
+        layergeojsonAnterior.setStyle({weight:3, color : colorant, fillColor: colorant, fillOpacity:0.2})
         layergeojsonAnterior.pm.disable();
       }else if (geom.type == 'Point'){
         layergeojsonAnterior.pm.disable();
@@ -1254,6 +1269,12 @@ function MostrarFormMap() {
     '</div></li>'+
     '<li class="sub-title">Descripción de la Unidad<sup style="color : red">*</sup></li>'+
     '<li class="sb-text"> <textarea id="descriUGS" class="form-control "rows="3"> </textarea><i>(Descripción lo mas detallada posible de las razones o características por las cuales se identificó esta unidad)</i></li>'+
+    '<li class="sub-title">Color de la Unidad<sup style="color : red">*</sup></li>'+
+    '<li>'+
+      '<div id="cp_UGS" class="input-group inp_plancha" data-color="rgb(255, 255, 255)">'+
+        '<span class="input-group-text colorpicker-input-addon span_plancha"><i></i></span>'+
+      '</div>'+
+    '</li>'+
     '<li class="sub-title">Equipo de Trabajo<sup style="color : red">*</sup></li>'+
     '<li class="sb-text"> <textarea id="recolectors" class="form-control"rows="2"> </textarea><i>(Ingrese los nombres de los integrantes de su grupo de trabajo)</i></li>'+
     '<li class="sub-title">Plancha<sup style="color : red">*</sup></li>'+
@@ -1264,6 +1285,14 @@ function MostrarFormMap() {
     '<a class="btn-descargar" id="markSave" onclick="GuardarMap()" type="button"><i class="fas fa-save"></i> Guardar </a>'
     );
     $("#fecha").val(dateFormat(new Date(),'Y-m-d'));
+
+    $('#cp_UGS').colorpicker().on('colorpickerChange colorpickerCreate', function (e) {    
+      layerEdit.setStyle({
+        color: e.value,
+        fillColor: e.value
+      });
+    });
+    
 }
 // Función que se llama al seleccionar una figura ya existente
 function EditExistMark(e) {
@@ -1274,6 +1303,7 @@ function EditExistMark(e) {
   claseLayer = layergeojson.properties.clase;
   ResaltarFeat(e.layer, true);
   console.log(e.layer.toGeoJSON());
+
 
   $("#listSidebarLeft").empty();
   $("#listSidebarLeft").append(
@@ -1337,6 +1367,7 @@ function EditExistMap(e) {
   $("#recolectors").val(layergeojson.properties.grupo);
   $("#fecha").val(layergeojson.properties.fecha);
   $("#plancha").val(layergeojson.properties.plancha);
+  $("#cp_UGS i" ).css( 'background',layergeojson.properties.color);
   if (!sidebarLeft) {
     Recarga();
   }
@@ -1501,7 +1532,7 @@ function GuardarenBD() {
   });
 }
 
-function GuardarMap(params) {
+function GuardarMap() {
   if (layergeojson !== null && claseLayer == 'nuevo_map') {
     var isCorrect = true;
     var idsMark = ["nombreUGS", "codigoUGS", "tipoUGS", "descriUGS", "recolectors", "plancha"];
@@ -1514,6 +1545,16 @@ function GuardarMap(params) {
     if (isCorrect) {
       map.spin(true, spinOpts);
       
+
+      var colorsito = $('#cp_UGS').colorpicker('getValue').replace("rgb(","");
+      console.log(colorsito );
+      colorsito = colorsito.replace(")","");
+      console.log(colorsito );
+      colorsito = colorsito.split(",");
+
+      colorsito1 = "#" + ((1 << 24) + (parseInt(colorsito[0]) << 16) + (parseInt(colorsito[1]) << 8) + parseInt(colorsito[2])).toString(16).slice(1);
+
+
       L.extend(layergeojson.properties, {
         Nom_UGS: $("#nombreUGS").val(),
         Cod_UGS: $("#codigoUGS").val(),
@@ -1522,7 +1563,10 @@ function GuardarMap(params) {
         grupo: $("#recolectors").val(),
         fecha: $("#fecha").val(),
         plancha: $("#plancha").val(),
+        color: colorsito1,
       });
+      colorguardar = true;
+      coloranterior = colorsito1;
 
       database.ref().child("semestres").get().then((snapshot) => {
         if (snapshot.exists()) {
@@ -1571,43 +1615,60 @@ function GuardarMap(params) {
     if (isCorrect) {
       map.spin(true, spinOpts);
       
-      L.extend(layergeojson.properties, {
-        Nom_UGS: $("#nombreUGS").val(),
-        Cod_UGS: $("#codigoUGS").val(),
-        Tipo_UGS: $("#tipoUGS").val(),
-        Descri_UGS: $("#descriUGS").val(),
-        grupo: $("#recolectors").val(),
-        fecha: $("#fecha").val(),
-        plancha: $("#plancha").val(),
-      });
+
+
+      var colorsito = $('#cp_UGS').colorpicker('getValue').replace("rgb(","");
+      console.log(colorsito );
+      colorsito = colorsito.replace(")","");
+      console.log(colorsito );
+      colorsito = colorsito.split(",");
+
+      colorsito1 = "#" + ((1 << 24) + (parseInt(colorsito[0]) << 16) + (parseInt(colorsito[1]) << 8) + parseInt(colorsito[2])).toString(16).slice(1);
+      
+      layergeojson.properties.Nom_UGS = $("#nombreUGS").val();
+      layergeojson.properties.Cod_UGS = $("#codigoUGS").val();
+      layergeojson.properties.Tipo_UGS = $("#tipoUGS").val();
+      layergeojson.properties.Descri_UGS = $("#descriUGS").val();
+      layergeojson.properties.grupo = $("#recolectors").val();
+      layergeojson.properties.fecha = $("#fecha").val();
+      layergeojson.properties.plancha = $("#plancha").val();
+      layergeojson.properties.color = colorsito1;
+      
+      
+      
+      var savelayer = layergeojson;
       var semestre = layergeojson.properties.semestre;
 
-      delete layergeojson.properties.semestre;
-      delete layergeojson.properties.id;
-      delete layergeojson.properties.clase;
-      delete layergeojson.properties._feature;
-      delete layergeojson.layer;
+      delete savelayer.properties.semestre;
+      delete savelayer.properties.id;
+      delete savelayer.properties.clase;
+      delete savelayer.properties._feature;
+      delete savelayer.layer;
     
-      database.ref("geomapas/"+semestre+"/feat_"+id).set({
+      database.ref("geomapas/"+semestre+"/feat_"+idLayer).set({
         id: idLayer,
         uid: uid,
         activo: true,
-        layergeojson : layergeojson
+        layergeojson : savelayer
       });
       map.spin(false);
-      alert("Guardado con Éxito");                                                
-         
+      alert("Guardado con Éxito");  
+      layergeojson.properties.id = idLayer;  
+      layergeojson.properties.semestre = semestre;  
+      layergeojson.properties.clase = claseLayer;                                    
+      console.log(layergeojson);
+      console.log(allData.toGeoJSON())
     }else{
       alert("Por Favor Llene Todos los Campos");
     }
   }
   if (layergeojson == null) {
-    alert("Seleccione el Marcador a Guardar");
+    alert("Seleccione el polígono a Guardar");
   }
-  if (claseLayer != 'nuevo_map' || claseLayer != 'geomapas') {
-    alert("Esto No es un Poligono");
-  }
+
 }
+
+
 
 // Función para eliminar una figura
 function EliminarFeat() {
