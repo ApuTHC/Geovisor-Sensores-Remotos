@@ -31,6 +31,9 @@ var urlRockCheck = [];
 var fileRock =[];
 var datosCopiadosMap = {};
 var datosCopiadosMark = {};
+var lat = 'N/A';
+var lng = 'N/A';
+var legend;
 // Opciones del Spin
 var spinOpts = {
   lines: 10, // The number of lines to draw
@@ -835,6 +838,10 @@ $(document).ready(function () {
   CargarMapas();
   // Cargando Botón Split
   CargarBtnSplit();
+  // Cargando Location
+  CargarLocation();
+  // Cargando Leyenda
+  CargarLegend();
 
   // Mostrando los municipios de la zona de estudio
   Acordiones();
@@ -1101,6 +1108,53 @@ function cutPolygon(polygon, line, direction, id) {
   }
 
   return retVal;
+}
+//Location
+function CargarLocation(){
+  map.addControl(L.control.locate({
+    locateOptions: {
+            enableHighAccuracy: true,
+            maxZoom: 17,
+            position: 'topleft',
+            flyTo: true,
+            showCompass: true,
+            strings: {
+              title: "Localización",
+              metersUnit: "metros",
+              feetUnit: "feet",
+              popup: "Tu estás aproximadamente a {distance} {unit} al rededor de este punto: [lat: "+lat+', lng: '+lng+']',
+              outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+            }
+  }})).on('locationfound', function(e){
+        lat = e.latitude;
+        lng = e.longitude; 
+        console.log(lat, lng);
+        $(".leyendita").html("Lat: "+lat+", Lng: "+lng);
+        
+      })
+      .on('locationerror', function(e){
+        console.log(e);
+        alert("Location access denied.");
+      });;
+}
+
+//Legend
+function CargarLegend() {
+  legend = L.control.Legend({
+    position: "bottomleft",
+    title: "Posición",
+    opacity: 0.7,
+    collapsed: false,
+    symbolWidth: 12,
+    symbolHeight: 12,
+    legends: [
+      {
+          label: "Lat: , Lng: ",
+          type: "image",
+          url: "../images/locDot - copia.jpg",
+      }
+    ]
+  }).addTo(map);
 }
 
 
