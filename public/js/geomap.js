@@ -393,6 +393,7 @@ var insumosGenerales = [
 var morfometrias = [
   new Mapa(null,'hillAlos','Hillshade - ALOS PALSAR',2,0,0.5, 'https://tiles.arcgis.com/tiles/gTVMpnerZFjZtXQb/arcgis/rest/services/Hillshade/MapServer'),
   new Mapa(null,'dem','DEM - ALOS PALSAR',2,0,0.5, 'https://tiles.arcgis.com/tiles/gTVMpnerZFjZtXQb/arcgis/rest/services/DEM/MapServer'),
+  new Mapa(null,'slope','Mapa de Pendientes',2,0,0.5, 'https://tiles.arcgis.com/tiles/gTVMpnerZFjZtXQb/arcgis/rest/services/slope/MapServer'),
 ];
 // Función para dibujar los botones y acordiones de los insumos
 function CargarInsumos() {
@@ -1135,7 +1136,11 @@ function CargarLocation(){
       .on('locationerror', function(e){
         console.log(e);
         alert("Location access denied.");
-      });;
+      });
+
+$(".leaflet-control-locate-location-arrow").append('<i class="fas fa-location-arrow"></i>');
+
+
 }
 
 //Legend
@@ -2251,6 +2256,12 @@ function handleFileSHP(f) {
             }).join("<br />"), {
               maxHeight: 200
             });
+          }
+          if(feature.geometry.type == "Polygon"){
+            layer.on('click', EditNewMap);
+          }
+          if(feature.geometry.type == "Point"){
+            layer.on('click', EditNewMark);
           }
         }
       });

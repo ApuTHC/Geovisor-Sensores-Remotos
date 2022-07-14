@@ -6,10 +6,8 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin: 7px;
-    background-color: #000;
-    -webkit-mask-image: url("../icons/location-arrow-solid.svg");
-    mask-image: url("../icons/location-arrow-solid.svg");
+    margin: 2px;
+
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-position: center;
@@ -22,8 +20,8 @@
     height: 16px;
     margin: 7px;
     background-color: #000;
-    -webkit-mask-image: url("../icons/spinner-solid.svg");
-    mask-image: url("../icons/spinner-solid.svg");
+    -webkit-mask-image: url("../images/spinner-solid.svg");
+    mask-image: url("../images/spinner-solid.svg");
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-position: center;
